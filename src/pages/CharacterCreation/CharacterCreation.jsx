@@ -62,7 +62,6 @@ const CharacterCreation = () => {
       gender: selectedGender, // Gender for gameplay
       avatar: {
         ...character.avatar, // Use current avatar state
-        seed: characterName.trim(), // Set seed to character name for consistency
       },
     });
 
