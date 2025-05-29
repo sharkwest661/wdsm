@@ -5,20 +5,26 @@ import Card from "../../ui/Card/Card";
 import Button from "../../ui/Button/Button";
 import Avatar from "../../ui/Avatar/Avatar";
 import LanguageSelector from "../../ui/LanguageSelector/LanguageSelector";
-import useGameStore from "../../store/gameStore";
+
+// Import modular stores
+import { useAppStore, useCharacterStore } from "../../store";
+
 import styles from "./CharacterCreation.module.scss";
 
 const CharacterCreation = () => {
   const { t, i18n } = useTranslation();
 
-  // Correct Zustand usage - selective state picking
-  const character = useGameStore((state) => state.character);
-  const updateAvatar = useGameStore((state) => state.updateAvatar);
-  const generateRandomAvatar = useGameStore(
+  // Correct Zustand usage - selective state picking from modular stores
+  const character = useCharacterStore((state) => state.character);
+  const updateAvatar = useCharacterStore((state) => state.updateAvatar);
+  const generateRandomAvatar = useCharacterStore(
     (state) => state.generateRandomAvatar
   );
-  const createCharacter = useGameStore((state) => state.createCharacter);
-  const setLanguage = useGameStore((state) => state.setLanguage);
+  const createCharacter = useCharacterStore((state) => state.createCharacter);
+
+  // App store for language and game setup
+  const setLanguage = useAppStore((state) => state.setLanguage);
+  const setCharacterCreated = useAppStore((state) => state.setCharacterCreated);
 
   const [characterName, setCharacterName] = useState("");
   const [selectedGender, setSelectedGender] = useState(character.gender);
@@ -59,6 +65,9 @@ const CharacterCreation = () => {
         seed: characterName.trim(), // Set seed to character name for consistency
       },
     });
+
+    // Set character as created in app store
+    setCharacterCreated(true);
   };
 
   return (

@@ -16,26 +16,49 @@ import LanguageSelector from "./ui/LanguageSelector/LanguageSelector";
 
 import { SkillItem } from "./components";
 import { CharacterCreation } from "./pages";
-import useGameStore from "./store/gameStore";
+
+// Import modular stores
+import {
+  useAppStore,
+  useCharacterStore,
+  useSkillsStore,
+  useCareerStore,
+  useLifeStore,
+  useNotificationStore,
+} from "./store";
+
 import "./App.scss";
 
 const WebDevLifeSimulator = () => {
   const { t, i18n } = useTranslation();
 
-  // Correct Zustand usage - selective state picking
-  const character = useGameStore((state) => state.character);
-  const gameSetup = useGameStore((state) => state.gameSetup);
-  const skillTree = useGameStore((state) => state.skills.skillTree);
-  const language = useGameStore((state) => state.language);
-  const learnSkill = useGameStore((state) => state.learnSkill);
-  const setLanguage = useGameStore((state) => state.setLanguage);
+  // Correct Zustand usage - selective state picking from modular stores
+  const character = useCharacterStore((state) => state.character);
+  const gameSetup = useAppStore((state) => state.gameSetup);
+  const language = useAppStore((state) => state.language);
+  const setLanguage = useAppStore((state) => state.setLanguage);
+
+  // Skills store
+  const skillTree = useSkillsStore((state) => state.skills.skillTree);
+  const learnSkill = useSkillsStore((state) => state.learnSkill);
+
+  // Life store actions
+  const eatFood = useLifeStore((state) => state.eatFood);
+  const playGames = useLifeStore((state) => state.playGames);
+  const sleep = useLifeStore((state) => state.sleep);
+
+  // Notification store
+  const addNotification = useNotificationStore(
+    (state) => state.addNotification
+  );
+  const notifications = useNotificationStore(
+    (state) => state.notifications.queue
+  );
+  const removeNotification = useNotificationStore(
+    (state) => state.removeNotification
+  );
 
   const [activeTab, setActiveTab] = useState("character");
-  const [notification, setNotification] = useState({
-    visible: false,
-    type: "info",
-    message: "",
-  });
 
   // Initialize language from store
   useEffect(() => {
@@ -70,15 +93,16 @@ const WebDevLifeSimulator = () => {
   ];
 
   const showNotification = (type, message) => {
-    setNotification({ visible: true, type, message });
+    addNotification(type, message);
   };
 
-  const closeNotification = () => {
-    setNotification({ visible: false, type: "info", message: "" });
+  const closeNotification = (notificationId) => {
+    removeNotification(notificationId);
   };
 
   const handleLearnSkill = (skillName, cost) => {
-    const success = learnSkill(skillName);
+    // Pass the character store to the skills store learn function
+    const success = learnSkill(skillName, useCharacterStore);
     if (success) {
       showNotification(
         "success",
@@ -92,7 +116,31 @@ const WebDevLifeSimulator = () => {
     }
   };
 
-  // Mock skills data - TODO: Move to game store
+  // Handle life activities
+  const handleEatFood = () => {
+    const result = eatFood(useCharacterStore);
+    if (result.success) {
+      showNotification("success", t("life.energyRestored.food"));
+    } else {
+      showNotification("warning", "Not enough money for food!");
+    }
+  };
+
+  const handlePlayGames = () => {
+    const result = playGames(useCharacterStore);
+    if (result.success) {
+      showNotification("success", t("life.energyRestored.games"));
+    } else {
+      showNotification("warning", "Not enough money for games!");
+    }
+  };
+
+  const handleSleep = () => {
+    const result = sleep(useCharacterStore);
+    showNotification("success", t("life.energyRestored.sleep"));
+  };
+
+  // Mock skills data - TODO: Move to skills store or fetch from store
   const mockSkills = [
     {
       name: "JavaScript",
@@ -326,37 +374,18 @@ const WebDevLifeSimulator = () => {
                     <Button
                       variant="info"
                       size="medium"
-                      onClick={() =>
-                        showNotification(
-                          "success",
-                          t("life.energyRestored.food")
-                        )
-                      }
+                      onClick={handleEatFood}
                     >
                       {t("life.eatFood")}
                     </Button>
                     <Button
                       variant="info"
                       size="medium"
-                      onClick={() =>
-                        showNotification(
-                          "success",
-                          t("life.energyRestored.games")
-                        )
-                      }
+                      onClick={handlePlayGames}
                     >
                       {t("life.playGames")}
                     </Button>
-                    <Button
-                      variant="info"
-                      size="medium"
-                      onClick={() =>
-                        showNotification(
-                          "success",
-                          t("life.energyRestored.sleep")
-                        )
-                      }
-                    >
+                    <Button variant="info" size="medium" onClick={handleSleep}>
                       {t("life.sleep")}
                     </Button>
                   </div>
@@ -394,12 +423,16 @@ const WebDevLifeSimulator = () => {
 
         <main className="app-main">{renderTabContent()}</main>
 
-        <Notification
-          type={notification.type}
-          message={notification.message}
-          isVisible={notification.visible}
-          onClose={closeNotification}
-        />
+        {/* Render notifications from notification store */}
+        {notifications.map((notification) => (
+          <Notification
+            key={notification.id}
+            type={notification.type}
+            message={notification.message}
+            isVisible={true}
+            onClose={() => closeNotification(notification.id)}
+          />
+        ))}
       </div>
     </div>
   );

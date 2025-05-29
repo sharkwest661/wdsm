@@ -9,6 +9,3 @@ export { default as useCareerStore } from "./careerStore";
 export { default as useBusinessStore } from "./businessStore";
 export { default as useLifeStore } from "./lifeStore";
 export { default as useNotificationStore } from "./notificationStore";
-
-// Legacy export for backward compatibility during migration
-export { default as useGameStore } from "./gameStore";
