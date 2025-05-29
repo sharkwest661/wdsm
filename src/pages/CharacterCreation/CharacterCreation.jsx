@@ -1,5 +1,5 @@
 // src/components/CharacterCreation/CharacterCreation.jsx
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Avatar, { genConfig } from "react-nice-avatar";
 import Card from "../../ui/Card/Card";
 import Button from "../../ui/Button/Button";
@@ -7,15 +7,23 @@ import useGameStore from "../../store/gameStore";
 import styles from "./CharacterCreation.module.scss";
 
 const CharacterCreation = () => {
-  const { character, updateAvatar, generateRandomAvatar, createCharacter } =
-    useGameStore();
+  const character = useGameStore((state) => state.character);
+  const updateAvatar = useGameStore((state) => state.updateAvatar);
+  const generateRandomAvatar = useGameStore(
+    (state) => state.generateRandomAvatar
+  );
+  const createCharacter = useGameStore((state) => state.createCharacter);
   const [characterName, setCharacterName] = useState("");
   const [selectedGender, setSelectedGender] = useState(character.avatar.sex);
 
-  const avatarConfig = genConfig({
-    sex: selectedGender,
-    seed: character.avatar.seed,
-  });
+  const avatarConfig = useMemo(
+    () =>
+      genConfig({
+        sex: selectedGender,
+        seed: character.avatar.seed,
+      }),
+    [selectedGender, character.avatar.seed]
+  );
 
   const handleGenderChange = (newGender) => {
     setSelectedGender(newGender);

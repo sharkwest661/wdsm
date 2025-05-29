@@ -1,33 +1,41 @@
 import React, { useState } from "react";
-import Card from "./ui/Card/Card";
-import Button from "./ui/Button/Button";
-import ProgressBar from "./ui/ProgressBar/ProgressBar";
-import TabNavigation from "./ui/TabNavigation/TabNavigation";
-import StatDisplay from "./ui/StatDisplay/StatDisplay";
-import Notification from "./ui/Notification/Notification";
-import SkillItem from "./components/SkillItem/SkillItem";
+import Avatar, { genConfig } from "react-nice-avatar";
+
+// Clean imports from organized folders
+import {
+  Card,
+  Button,
+  ProgressBar,
+  TabNavigation,
+  StatDisplay,
+  Notification,
+} from "./ui";
+
+import { SkillItem } from "./components";
+import { CharacterCreation } from "./pages";
+import useGameStore from "./store/gameStore";
 import "./App.scss";
 
 const WebDevLifeSimulator = () => {
+  const gameStore = useGameStore();
+  const { character, gameSetup, learnSkill } = gameStore;
+
   const [activeTab, setActiveTab] = useState("character");
   const [notification, setNotification] = useState({
     visible: false,
     type: "info",
     message: "",
   });
-  const [gameState, setGameState] = useState({
-    character: {
-      name: "Alex Developer",
-      age: 21,
-      money: 1500,
-      reputation: 45,
-      energy: 75,
-      skillPoints: 12,
-    },
-    skills: {
-      learned: ["HTML", "CSS"],
-      available: ["JavaScript", "React", "Python", "Node.js"],
-    },
+
+  // Show character creation if character hasn't been created yet
+  if (!gameSetup.isCharacterCreated) {
+    return <CharacterCreation />;
+  }
+
+  // Generate avatar config for display
+  const avatarConfig = genConfig({
+    sex: character.avatar.sex,
+    seed: character.avatar.seed,
   });
 
   const tabs = [
@@ -46,22 +54,9 @@ const WebDevLifeSimulator = () => {
     setNotification({ visible: false, type: "info", message: "" });
   };
 
-  const learnSkill = (skillName, cost) => {
-    if (gameState.character.skillPoints >= cost) {
-      setGameState((prev) => ({
-        ...prev,
-        character: {
-          ...prev.character,
-          skillPoints: prev.character.skillPoints - cost,
-        },
-        skills: {
-          ...prev.skills,
-          learned: [...prev.skills.learned, skillName],
-          available: prev.skills.available.filter(
-            (skill) => skill !== skillName
-          ),
-        },
-      }));
+  const handleLearnSkill = (skillName, cost) => {
+    const success = learnSkill(skillName);
+    if (success) {
       showNotification("success", `🎉 Successfully learned ${skillName}!`);
     } else {
       showNotification(
@@ -71,6 +66,7 @@ const WebDevLifeSimulator = () => {
     }
   };
 
+  // Mock skills data - TODO: Move to game store
   const mockSkills = [
     {
       name: "JavaScript",
@@ -111,11 +107,14 @@ const WebDevLifeSimulator = () => {
             <div className="character-layout">
               <Card variant="character" className="character-card">
                 <div className="character-card__avatar">
-                  <div className="avatar-placeholder">👨‍💻</div>
-                  <h2 className="character-name">{gameState.character.name}</h2>
-                  <p className="character-age">
-                    Age: {gameState.character.age}
-                  </p>
+                  <div className="avatar-placeholder">
+                    <Avatar
+                      style={{ width: "120px", height: "120px" }}
+                      {...avatarConfig}
+                    />
+                  </div>
+                  <h2 className="character-name">{character.name}</h2>
+                  <p className="character-age">Age: {character.age}</p>
                 </div>
               </Card>
 
@@ -125,21 +124,21 @@ const WebDevLifeSimulator = () => {
                   <StatDisplay
                     emoji="💰"
                     label="Money"
-                    value={gameState.character.money}
+                    value={character.money}
                     format="currency"
                     variant="highlighted"
                   />
                   <StatDisplay
                     emoji="⭐"
                     label="Reputation"
-                    value={gameState.character.reputation}
+                    value={character.reputation}
                     maxValue={100}
                     format="number"
                   />
                   <StatDisplay
                     emoji="🔧"
                     label="Skill Points"
-                    value={gameState.character.skillPoints}
+                    value={character.skillPoints}
                     format="number"
                     variant="highlighted"
                   />
@@ -147,7 +146,7 @@ const WebDevLifeSimulator = () => {
 
                 <div className="energy-section mt-lg">
                   <ProgressBar
-                    progress={gameState.character.energy}
+                    progress={character.energy}
                     max={100}
                     variant="energy"
                     label="⚡ Energy"
@@ -170,7 +169,7 @@ const WebDevLifeSimulator = () => {
                 <StatDisplay
                   emoji="🔧"
                   label="Available Skill Points"
-                  value={gameState.character.skillPoints}
+                  value={character.skillPoints}
                   size="large"
                   variant="highlighted"
                 />
@@ -178,11 +177,10 @@ const WebDevLifeSimulator = () => {
 
               <div className="skills-grid">
                 {mockSkills.map((skill) => {
-                  const isLearned = gameState.skills.learned.includes(
-                    skill.name
-                  );
+                  const skillData = gameStore.skills.skillTree[skill.name];
+                  const isLearned = skillData?.learned || false;
                   const isLocked = skill.requirements.some(
-                    (req) => !gameState.skills.learned.includes(req)
+                    (req) => !gameStore.skills.skillTree[req]?.learned
                   );
 
                   return (
@@ -195,7 +193,7 @@ const WebDevLifeSimulator = () => {
                       requirements={skill.requirements}
                       isLearned={isLearned}
                       isLocked={isLocked}
-                      onLearn={() => learnSkill(skill.name, skill.cost)}
+                      onLearn={() => handleLearnSkill(skill.name, skill.cost)}
                     />
                   );
                 })}
@@ -346,7 +344,7 @@ const WebDevLifeSimulator = () => {
         <header className="app-header">
           <h1 className="text-game-title">💻 Web Dev Life Simulator</h1>
           <p className="app-subtitle">
-            Build your coding career, one skill at a time!
+            Welcome back, {character.name}! Ready to code?
           </p>
         </header>
 
