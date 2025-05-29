@@ -424,7 +424,8 @@ const WebDevLifeSimulator = () => {
         <main className="app-main">{renderTabContent()}</main>
 
         {/* Render notifications from notification store */}
-        {notifications.map((notification) => (
+        {console.log("Notifications:", notifications)}
+        {notifications?.map((notification) => (
           <Notification
             key={notification.id}
             type={notification.type}
