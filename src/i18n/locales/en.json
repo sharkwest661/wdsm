@@ -1,0 +1,102 @@
+{
+  "game": {
+    "title": "💻 Web Dev Life Simulator",
+    "subtitle": "Welcome back, {{name}}! Ready to code?",
+    "loading": "Loading your developer journey..."
+  },
+  "characterCreation": {
+    "title": "🚀 Welcome to Web Dev Life!",
+    "subtitle": "Create your character and begin your coding journey",
+    "chooseAvatar": "👤 Choose Your Avatar",
+    "characterDetails": "📝 Character Details",
+    "gender": "Gender",
+    "male": "👨 Male",
+    "female": "👩 Female",
+    "appearance": "Appearance",
+    "randomizeAvatar": "🎲 Randomize Avatar",
+    "characterName": "Character Name",
+    "characterNamePlaceholder": "Enter your developer name...",
+    "startingStats": "Starting Stats",
+    "startingSkills": "Starting Skills",
+    "skillsNote": "💡 Learn more skills as you progress through your career!",
+    "startJourney": "🚀 Start My Developer Journey",
+    "pleaseEnterName": "Please enter your character name!"
+  },
+  "stats": {
+    "money": "Money",
+    "reputation": "Reputation",
+    "skillPoints": "Skill Points",
+    "energy": "Energy",
+    "availableSkillPoints": "Available Skill Points"
+  },
+  "tabs": {
+    "character": "Character",
+    "skills": "Skills",
+    "career": "Career",
+    "business": "Business",
+    "life": "Life"
+  },
+  "character": {
+    "age": "Age: {{age}}",
+    "characterStats": "📊 Character Stats"
+  },
+  "skills": {
+    "title": "🔧 Technical Skills",
+    "learned": "✓ Learned",
+    "locked": "🔒 Locked",
+    "learn": "Learn",
+    "requires": "Requires: {{requirements}}",
+    "points": "{{cost}} points",
+    "learnSuccess": "🎉 Successfully learned {{skill}}!",
+    "learnFailed": "❌ Not enough skill points to learn {{skill}}",
+    "skills": {
+      "JavaScript": "The programming language of the web",
+      "React": "Popular front-end library for building UIs",
+      "Python": "Versatile programming language for backend and data science",
+      "Node.js": "JavaScript runtime for server-side development"
+    }
+  },
+  "career": {
+    "title": "🏢 Career Dashboard",
+    "currentStatus": "👨‍🎓 Current Status: <strong>{{status}}</strong>",
+    "statusDescription": "Complete your education and build skills to unlock better job opportunities!",
+    "takeCollegeExam": "📚 Take College Exam",
+    "browseJobs": "💼 Browse Jobs",
+    "statuses": {
+      "highSchoolGraduate": "High School Graduate"
+    }
+  },
+  "business": {
+    "title": "💼 Business Empire",
+    "readyToStart": "🚀 Ready to start your entrepreneurial journey?",
+    "description": "Build products, start companies, and create your tech empire!",
+    "productIdeas": "💡 Product Ideas Generated",
+    "createFirstProduct": "🏗️ Create First Product (University Required)"
+  },
+  "life": {
+    "title": "🏠 Life & Lifestyle",
+    "housing": "Housing",
+    "relationshipStatus": "Relationship Status",
+    "restoreEnergy": "⚡ Restore Energy",
+    "eatFood": "🍕 Eat Food",
+    "playGames": "🎮 Play Games",
+    "sleep": "😴 Sleep",
+    "basicApartment": "Basic Apartment",
+    "single": "Single",
+    "energyRestored": {
+      "food": "🍕 Enjoyed a delicious meal! +20 Energy",
+      "games": "🎮 Had fun gaming! +15 Energy",
+      "sleep": "😴 Good night sleep! +30 Energy"
+    }
+  },
+  "language": {
+    "english": "English",
+    "azerbaijani": "Azərbaycan dili",
+    "selectLanguage": "🌐 Language"
+  },
+  "buttons": {
+    "learn": "Learn",
+    "learned": "Learned",
+    "locked": "Locked"
+  }
+}

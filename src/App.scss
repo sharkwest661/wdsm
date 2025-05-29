@@ -25,9 +25,27 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
 
   @media (max-width: map-get($breakpoints, "mobile")) {
     @include spacing("padding", "md");
+  }
+}
+
+// ==============================================
+// Language Selector Positioning
+// ==============================================
+
+.app-language-selector {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: map-get($z-index, "header");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    position: relative;
+    margin-bottom: map-get($spacing, "md");
+    text-align: right;
   }
 }
 
@@ -39,6 +57,14 @@
   text-align: center;
   @include spacing("margin-bottom", "xxl");
   animation: bounceIn 0.8s ease-out;
+  @include spacing(
+    "margin-top",
+    "xl"
+  ); // Add top margin to account for language selector
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    @include spacing("margin-top", "md");
+  }
 }
 
 .app-subtitle {
@@ -357,7 +383,8 @@
   }
 
   .tab-container,
-  .notification {
+  .notification,
+  .app-language-selector {
     display: none !important;
   }
 

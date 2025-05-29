@@ -1,0 +1,102 @@
+{
+  "game": {
+    "title": "💻 Veb Developer Həyat Simulyatoru",
+    "subtitle": "Yenidən xoş gəldin, {{name}}! Kodlaşmağa hazırsan?",
+    "loading": "Developer səyahətin yüklənir..."
+  },
+  "characterCreation": {
+    "title": "🚀 Veb Developer Həyatına Xoş Gəldin!",
+    "subtitle": "Xarakterini yarat və kodlaşma səyahətinə başla",
+    "chooseAvatar": "👤 Avatarını Seç",
+    "characterDetails": "📝 Xarakter Təfərrüatları",
+    "gender": "Cins",
+    "male": "👨 Kişi",
+    "female": "👩 Qadın",
+    "appearance": "Görünüş",
+    "randomizeAvatar": "🎲 Təsadüfi Avatar",
+    "characterName": "Xarakter Adı",
+    "characterNamePlaceholder": "Developer adını daxil et...",
+    "startingStats": "Başlanğıc Statistikalar",
+    "startingSkills": "Başlanğıc Bacarıqlar",
+    "skillsNote": "💡 Karyeran boyunca daha çox bacarıq öyrən!",
+    "startJourney": "🚀 Developer Səyahətimi Başlat",
+    "pleaseEnterName": "Xahiş edirik xarakter adını daxil edin!"
+  },
+  "stats": {
+    "money": "Pul",
+    "reputation": "Reputasiya",
+    "skillPoints": "Bacarıq Xalları",
+    "energy": "Enerji",
+    "availableSkillPoints": "Mövcud Bacarıq Xalları"
+  },
+  "tabs": {
+    "character": "Xarakter",
+    "skills": "Bacarıqlar",
+    "career": "Karyera",
+    "business": "Biznes",
+    "life": "Həyat"
+  },
+  "character": {
+    "age": "Yaş: {{age}}",
+    "characterStats": "📊 Xarakter Statistikaları"
+  },
+  "skills": {
+    "title": "🔧 Texniki Bacarıqlar",
+    "learned": "✓ Öyrənildi",
+    "locked": "🔒 Bağlı",
+    "learn": "Öyrən",
+    "requires": "Tələb edir: {{requirements}}",
+    "points": "{{cost}} xal",
+    "learnSuccess": "🎉 {{skill}} uğurla öyrənildi!",
+    "learnFailed": "❌ {{skill}} öyrənmək üçün kifayət qədər bacarıq xalı yoxdur",
+    "skills": {
+      "JavaScript": "Vebin proqramlaşdırma dili",
+      "React": "UI qurma üçün məşhur front-end kitabxanası",
+      "Python": "Backend və data science üçün çoxməqsədli proqramlaşdırma dili",
+      "Node.js": "Server tərəfi inkişaf üçün JavaScript runtime"
+    }
+  },
+  "career": {
+    "title": "🏢 Karyera Paneli",
+    "currentStatus": "👨‍🎓 Hazırkı Status: <strong>{{status}}</strong>",
+    "statusDescription": "Təhsilini tamamla və bacarıqlar öyrən ki, daha yaxşı iş imkanları açılsın!",
+    "takeCollegeExam": "📚 Kollec İmtahanı Ver",
+    "browseJobs": "💼 İşlərə Bax",
+    "statuses": {
+      "highSchoolGraduate": "Orta Məktəb Məzunu"
+    }
+  },
+  "business": {
+    "title": "💼 Biznes İmperiyası",
+    "readyToStart": "🚀 Sahibkarlıq səyahətinə başlamağa hazırsan?",
+    "description": "Məhsullar yarat, şirkətlər qur və texnologiya imperiyasını qur!",
+    "productIdeas": "💡 Yaradılan Məhsul İdeyaları",
+    "createFirstProduct": "🏗️ İlk Məhsulu Yarat (Universitet Tələb Olunur)"
+  },
+  "life": {
+    "title": "🏠 Həyat və Yaşayış Tərzi",
+    "housing": "Yaşayış",
+    "relationshipStatus": "Münasibət Statusu",
+    "restoreEnergy": "⚡ Enerji Bərpa Et",
+    "eatFood": "🍕 Yemək Ye",
+    "playGames": "🎮 Oyun Oyna",
+    "sleep": "😴 Yat",
+    "basicApartment": "Sadə Mənzil",
+    "single": "Subay",
+    "energyRestored": {
+      "food": "🍕 Dadlı yeməkdən həzz aldın! +20 Enerji",
+      "games": "🎮 Oyundan əyləndin! +15 Enerji",
+      "sleep": "😴 Yaxşı gecə yuxusu! +30 Enerji"
+    }
+  },
+  "language": {
+    "english": "English",
+    "azerbaijani": "Azərbaycan dili",
+    "selectLanguage": "🌐 Dil"
+  },
+  "buttons": {
+    "learn": "Öyrən",
+    "learned": "Öyrənildi",
+    "locked": "Bağlı"
+  }
+}

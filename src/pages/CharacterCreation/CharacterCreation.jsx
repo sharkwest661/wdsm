@@ -1,20 +1,39 @@
-// src/components/CharacterCreation/CharacterCreation.jsx
-import React, { useMemo, useState } from "react";
+// src/pages/CharacterCreation/CharacterCreation.jsx
+import React, { useMemo, useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Avatar, { genConfig } from "react-nice-avatar";
 import Card from "../../ui/Card/Card";
 import Button from "../../ui/Button/Button";
+import LanguageSelector from "../../ui/LanguageSelector/LanguageSelector";
 import useGameStore from "../../store/gameStore";
 import styles from "./CharacterCreation.module.scss";
 
 const CharacterCreation = () => {
+  const { t, i18n } = useTranslation();
+
+  // Correct Zustand usage - selective state picking
   const character = useGameStore((state) => state.character);
   const updateAvatar = useGameStore((state) => state.updateAvatar);
   const generateRandomAvatar = useGameStore(
     (state) => state.generateRandomAvatar
   );
   const createCharacter = useGameStore((state) => state.createCharacter);
+  const setLanguage = useGameStore((state) => state.setLanguage);
+
   const [characterName, setCharacterName] = useState("");
   const [selectedGender, setSelectedGender] = useState(character.avatar.sex);
+
+  // Sync language changes with store
+  useEffect(() => {
+    const handleLanguageChange = (lng) => {
+      setLanguage(lng);
+    };
+
+    i18n.on("languageChanged", handleLanguageChange);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChange);
+    };
+  }, [i18n, setLanguage]);
 
   const avatarConfig = useMemo(
     () =>
@@ -36,7 +55,7 @@ const CharacterCreation = () => {
 
   const handleStartGame = () => {
     if (!characterName.trim()) {
-      alert("Please enter your character name!");
+      alert(t("characterCreation.pleaseEnterName"));
       return;
     }
 
@@ -52,16 +71,21 @@ const CharacterCreation = () => {
   return (
     <div className={styles.characterCreation}>
       <div className={styles.container}>
+        {/* Language Selector */}
+        <div className={styles.languageSelector}>
+          <LanguageSelector variant="dropdown" />
+        </div>
+
         <header className={styles.header}>
-          <h1 className="text-game-title">🚀 Welcome to Web Dev Life!</h1>
-          <p className={styles.subtitle}>
-            Create your character and begin your coding journey
-          </p>
+          <h1 className="text-game-title">{t("characterCreation.title")}</h1>
+          <p className={styles.subtitle}>{t("characterCreation.subtitle")}</p>
         </header>
 
         <div className={styles.content}>
           <Card className={styles.avatarCard}>
-            <h2 className={styles.cardTitle}>👤 Choose Your Avatar</h2>
+            <h2 className={styles.cardTitle}>
+              {t("characterCreation.chooseAvatar")}
+            </h2>
 
             <div className={styles.avatarSection}>
               <div className={styles.avatarContainer}>
@@ -73,7 +97,9 @@ const CharacterCreation = () => {
 
               <div className={styles.avatarControls}>
                 <div className={styles.genderSelection}>
-                  <h3 className={styles.controlTitle}>Gender</h3>
+                  <h3 className={styles.controlTitle}>
+                    {t("characterCreation.gender")}
+                  </h3>
                   <div className={styles.genderButtons}>
                     <Button
                       variant={
@@ -82,7 +108,7 @@ const CharacterCreation = () => {
                       size="medium"
                       onClick={() => handleGenderChange("man")}
                     >
-                      👨 Male
+                      {t("characterCreation.male")}
                     </Button>
                     <Button
                       variant={
@@ -91,20 +117,22 @@ const CharacterCreation = () => {
                       size="medium"
                       onClick={() => handleGenderChange("woman")}
                     >
-                      👩 Female
+                      {t("characterCreation.female")}
                     </Button>
                   </div>
                 </div>
 
                 <div className={styles.randomizeSection}>
-                  <h3 className={styles.controlTitle}>Appearance</h3>
+                  <h3 className={styles.controlTitle}>
+                    {t("characterCreation.appearance")}
+                  </h3>
                   <Button
                     variant="info"
                     size="large"
                     onClick={handleRandomizeAvatar}
                     fullWidth
                   >
-                    🎲 Randomize Avatar
+                    {t("characterCreation.randomizeAvatar")}
                   </Button>
                 </div>
               </div>
@@ -112,17 +140,19 @@ const CharacterCreation = () => {
           </Card>
 
           <Card className={styles.detailsCard}>
-            <h2 className={styles.cardTitle}>📝 Character Details</h2>
+            <h2 className={styles.cardTitle}>
+              {t("characterCreation.characterDetails")}
+            </h2>
 
             <div className={styles.nameSection}>
               <label className={styles.inputLabel} htmlFor="characterName">
-                Character Name
+                {t("characterCreation.characterName")}
               </label>
               <input
                 id="characterName"
                 type="text"
                 className={styles.nameInput}
-                placeholder="Enter your developer name..."
+                placeholder={t("characterCreation.characterNamePlaceholder")}
                 value={characterName}
                 onChange={(e) => setCharacterName(e.target.value)}
                 maxLength={30}
@@ -130,39 +160,55 @@ const CharacterCreation = () => {
             </div>
 
             <div className={styles.startingStats}>
-              <h3 className={styles.controlTitle}>Starting Stats</h3>
+              <h3 className={styles.controlTitle}>
+                {t("characterCreation.startingStats")}
+              </h3>
               <div className={styles.statsGrid}>
                 <div className={styles.statItem}>
                   <span className={styles.statEmoji}>💰</span>
-                  <span className={styles.statLabel}>Money</span>
-                  <span className={styles.statValue}>1,500 ₼</span>
+                  <span className={styles.statLabel}>{t("stats.money")}</span>
+                  <span className={styles.statValue}>
+                    {character.money.toLocaleString()} ₼
+                  </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statEmoji}>⭐</span>
-                  <span className={styles.statLabel}>Reputation</span>
-                  <span className={styles.statValue}>45</span>
+                  <span className={styles.statLabel}>
+                    {t("stats.reputation")}
+                  </span>
+                  <span className={styles.statValue}>
+                    {character.reputation}
+                  </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statEmoji}>🔧</span>
-                  <span className={styles.statLabel}>Skill Points</span>
-                  <span className={styles.statValue}>12</span>
+                  <span className={styles.statLabel}>
+                    {t("stats.skillPoints")}
+                  </span>
+                  <span className={styles.statValue}>
+                    {character.skillPoints}
+                  </span>
                 </div>
                 <div className={styles.statItem}>
                   <span className={styles.statEmoji}>⚡</span>
-                  <span className={styles.statLabel}>Energy</span>
-                  <span className={styles.statValue}>75/100</span>
+                  <span className={styles.statLabel}>{t("stats.energy")}</span>
+                  <span className={styles.statValue}>
+                    {character.energy}/100
+                  </span>
                 </div>
               </div>
             </div>
 
             <div className={styles.startingSkills}>
-              <h3 className={styles.controlTitle}>Starting Skills</h3>
+              <h3 className={styles.controlTitle}>
+                {t("characterCreation.startingSkills")}
+              </h3>
               <div className={styles.skillsList}>
                 <span className={styles.skillBadge}>🟧 HTML</span>
                 <span className={styles.skillBadge}>🟦 CSS</span>
               </div>
               <p className={styles.skillsNote}>
-                💡 Learn more skills as you progress through your career!
+                {t("characterCreation.skillsNote")}
               </p>
             </div>
           </Card>
@@ -176,7 +222,7 @@ const CharacterCreation = () => {
             fullWidth
             disabled={!characterName.trim()}
           >
-            🚀 Start My Developer Journey
+            {t("characterCreation.startJourney")}
           </Button>
         </div>
       </div>

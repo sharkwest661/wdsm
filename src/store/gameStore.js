@@ -5,12 +5,15 @@ import { persist } from "zustand/middleware";
 const useGameStore = create(
   persist(
     (set, get) => ({
+      // Language State
+      language: "en",
+
       // Character State
       character: {
         name: "Alex Developer",
         age: 21,
-        money: 1500,
-        reputation: 45,
+        money: 100,
+        reputation: 5,
         energy: 75,
         skillPoints: 12,
         education: "high_school", // high_school, college, university, academy
@@ -77,6 +80,12 @@ const useGameStore = create(
         achievements: [],
         completedGoals: [],
       },
+
+      // Language Actions
+      setLanguage: (languageCode) =>
+        set(() => ({
+          language: languageCode,
+        })),
 
       // Actions
       learnSkill: (skillName) => {
@@ -206,6 +215,7 @@ const useGameStore = create(
       // Reset game
       resetGame: () =>
         set(() => ({
+          language: "en",
           character: {
             name: "Alex Developer",
             age: 21,
@@ -246,6 +256,7 @@ const useGameStore = create(
       name: "web-dev-sim-storage",
       // Only persist certain parts of the state
       partialize: (state) => ({
+        language: state.language,
         character: state.character,
         skills: state.skills,
         career: state.career,

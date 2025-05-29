@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import Avatar, { genConfig } from "react-nice-avatar";
 
 // Clean imports from organized folders
@@ -11,14 +12,23 @@ import {
   Notification,
 } from "./ui";
 
+import LanguageSelector from "./ui/LanguageSelector/LanguageSelector";
+
 import { SkillItem } from "./components";
 import { CharacterCreation } from "./pages";
 import useGameStore from "./store/gameStore";
 import "./App.scss";
 
 const WebDevLifeSimulator = () => {
-  const gameStore = useGameStore();
-  const { character, gameSetup, learnSkill } = gameStore;
+  const { t, i18n } = useTranslation();
+
+  // Correct Zustand usage - selective state picking
+  const character = useGameStore((state) => state.character);
+  const gameSetup = useGameStore((state) => state.gameSetup);
+  const skillTree = useGameStore((state) => state.skills.skillTree);
+  const language = useGameStore((state) => state.language);
+  const learnSkill = useGameStore((state) => state.learnSkill);
+  const setLanguage = useGameStore((state) => state.setLanguage);
 
   const [activeTab, setActiveTab] = useState("character");
   const [notification, setNotification] = useState({
@@ -26,6 +36,25 @@ const WebDevLifeSimulator = () => {
     type: "info",
     message: "",
   });
+
+  // Initialize language from store
+  useEffect(() => {
+    if (language && i18n.language !== language) {
+      i18n.changeLanguage(language);
+    }
+  }, [language, i18n]);
+
+  // Sync language changes with store
+  useEffect(() => {
+    const handleLanguageChange = (lng) => {
+      setLanguage(lng);
+    };
+
+    i18n.on("languageChanged", handleLanguageChange);
+    return () => {
+      i18n.off("languageChanged", handleLanguageChange);
+    };
+  }, [i18n, setLanguage]);
 
   // Show character creation if character hasn't been created yet
   if (!gameSetup.isCharacterCreated) {
@@ -38,12 +67,14 @@ const WebDevLifeSimulator = () => {
     seed: character.avatar.seed,
   });
 
+  console.log("Avatar Config:", avatarConfig, character.avatar.seed);
+
   const tabs = [
-    { id: "character", emoji: "👤", label: "Character" },
-    { id: "skills", emoji: "🔧", label: "Skills" },
-    { id: "career", emoji: "🏢", label: "Career" },
-    { id: "business", emoji: "💼", label: "Business" },
-    { id: "life", emoji: "🏠", label: "Life" },
+    { id: "character", emoji: "👤", label: t("tabs.character") },
+    { id: "skills", emoji: "🔧", label: t("tabs.skills") },
+    { id: "career", emoji: "🏢", label: t("tabs.career") },
+    { id: "business", emoji: "💼", label: t("tabs.business") },
+    { id: "life", emoji: "🏠", label: t("tabs.life") },
   ];
 
   const showNotification = (type, message) => {
@@ -57,11 +88,14 @@ const WebDevLifeSimulator = () => {
   const handleLearnSkill = (skillName, cost) => {
     const success = learnSkill(skillName);
     if (success) {
-      showNotification("success", `🎉 Successfully learned ${skillName}!`);
+      showNotification(
+        "success",
+        t("skills.learnSuccess", { skill: skillName })
+      );
     } else {
       showNotification(
         "warning",
-        `❌ Not enough skill points to learn ${skillName}`
+        t("skills.learnFailed", { skill: skillName })
       );
     }
   };
@@ -73,29 +107,28 @@ const WebDevLifeSimulator = () => {
       cost: 3,
       emoji: "🟨",
       requirements: ["HTML", "CSS"],
-      description: "The programming language of the web",
+      description: t("skills.skills.JavaScript"),
     },
     {
       name: "React",
       cost: 4,
       emoji: "⚛️",
       requirements: ["JavaScript"],
-      description: "Popular front-end library for building UIs",
+      description: t("skills.skills.React"),
     },
     {
       name: "Python",
       cost: 4,
       emoji: "🐍",
       requirements: [],
-      description:
-        "Versatile programming language for backend and data science",
+      description: t("skills.skills.Python"),
     },
     {
       name: "Node.js",
       cost: 3,
       emoji: "🟢",
       requirements: ["JavaScript"],
-      description: "JavaScript runtime for server-side development",
+      description: t("skills.skills.Node.js"),
     },
   ];
 
@@ -114,30 +147,34 @@ const WebDevLifeSimulator = () => {
                     />
                   </div>
                   <h2 className="character-name">{character.name}</h2>
-                  <p className="character-age">Age: {character.age}</p>
+                  <p className="character-age">
+                    {t("character.age", { age: character.age })}
+                  </p>
                 </div>
               </Card>
 
               <Card className="stats-card">
-                <h3 className="text-card-title mb-lg">📊 Character Stats</h3>
+                <h3 className="text-card-title mb-lg">
+                  {t("character.characterStats")}
+                </h3>
                 <div className="stats-grid">
                   <StatDisplay
                     emoji="💰"
-                    label="Money"
+                    label={t("stats.money")}
                     value={character.money}
                     format="currency"
                     variant="highlighted"
                   />
                   <StatDisplay
                     emoji="⭐"
-                    label="Reputation"
+                    label={t("stats.reputation")}
                     value={character.reputation}
                     maxValue={100}
                     format="number"
                   />
                   <StatDisplay
                     emoji="🔧"
-                    label="Skill Points"
+                    label={t("stats.skillPoints")}
                     value={character.skillPoints}
                     format="number"
                     variant="highlighted"
@@ -149,7 +186,7 @@ const WebDevLifeSimulator = () => {
                     progress={character.energy}
                     max={100}
                     variant="energy"
-                    label="⚡ Energy"
+                    label={`⚡ ${t("stats.energy")}`}
                     showPercentage={true}
                     size="large"
                     animated={true}
@@ -164,11 +201,11 @@ const WebDevLifeSimulator = () => {
         return (
           <div className="tab-content">
             <Card>
-              <h3 className="text-card-title mb-lg">🔧 Technical Skills</h3>
+              <h3 className="text-card-title mb-lg">{t("skills.title")}</h3>
               <div className="skills-info mb-lg">
                 <StatDisplay
                   emoji="🔧"
-                  label="Available Skill Points"
+                  label={t("stats.availableSkillPoints")}
                   value={character.skillPoints}
                   size="large"
                   variant="highlighted"
@@ -177,10 +214,10 @@ const WebDevLifeSimulator = () => {
 
               <div className="skills-grid">
                 {mockSkills.map((skill) => {
-                  const skillData = gameStore.skills.skillTree[skill.name];
+                  const skillData = skillTree[skill.name];
                   const isLearned = skillData?.learned || false;
                   const isLocked = skill.requirements.some(
-                    (req) => !gameStore.skills.skillTree[req]?.learned
+                    (req) => !skillTree[req]?.learned
                   );
 
                   return (
@@ -206,22 +243,26 @@ const WebDevLifeSimulator = () => {
         return (
           <div className="tab-content">
             <Card>
-              <h3 className="text-card-title mb-lg">🏢 Career Dashboard</h3>
+              <h3 className="text-card-title mb-lg">{t("career.title")}</h3>
               <div className="career-info">
-                <p className="text-body mb-md">
-                  👨‍🎓 Current Status: <strong>High School Graduate</strong>
-                </p>
+                <p
+                  className="text-body mb-md"
+                  dangerouslySetInnerHTML={{
+                    __html: t("career.currentStatus", {
+                      status: t("career.statuses.highSchoolGraduate"),
+                    }),
+                  }}
+                />
                 <p className="text-secondary mb-lg">
-                  Complete your education and build skills to unlock better job
-                  opportunities!
+                  {t("career.statusDescription")}
                 </p>
 
                 <div className="action-buttons">
                   <Button variant="primary" size="large">
-                    📚 Take College Exam
+                    {t("career.takeCollegeExam")}
                   </Button>
                   <Button variant="secondary" size="large">
-                    💼 Browse Jobs
+                    {t("career.browseJobs")}
                   </Button>
                 </div>
               </div>
@@ -233,13 +274,11 @@ const WebDevLifeSimulator = () => {
         return (
           <div className="tab-content">
             <Card variant="business">
-              <h3 className="text-card-title mb-lg">💼 Business Empire</h3>
+              <h3 className="text-card-title mb-lg">{t("business.title")}</h3>
               <div className="business-info">
-                <p className="text-body mb-md">
-                  🚀 Ready to start your entrepreneurial journey?
-                </p>
+                <p className="text-body mb-md">{t("business.readyToStart")}</p>
                 <p className="text-secondary mb-lg">
-                  Build products, start companies, and create your tech empire!
+                  {t("business.description")}
                 </p>
 
                 <div className="progress-section mb-lg">
@@ -247,13 +286,13 @@ const WebDevLifeSimulator = () => {
                     progress={0}
                     max={100}
                     variant="warning"
-                    label="💡 Product Ideas Generated"
+                    label={t("business.productIdeas")}
                     showPercentage={false}
                   />
                 </div>
 
                 <Button variant="warning" size="large" disabled>
-                  🏗️ Create First Product (University Required)
+                  {t("business.createFirstProduct")}
                 </Button>
               </div>
             </Card>
@@ -264,22 +303,22 @@ const WebDevLifeSimulator = () => {
         return (
           <div className="tab-content">
             <Card variant="life">
-              <h3 className="text-card-title mb-lg">🏠 Life & Lifestyle</h3>
+              <h3 className="text-card-title mb-lg">{t("life.title")}</h3>
               <div className="life-sections">
                 <div className="life-stats mb-lg">
                   <div className="life-stat-row">
                     <StatDisplay
                       emoji="🏠"
-                      label="Housing"
-                      value="Basic Apartment"
+                      label={t("life.housing")}
+                      value={t("life.basicApartment")}
                       format="text"
                     />
                   </div>
                   <div className="life-stat-row">
                     <StatDisplay
                       emoji="💕"
-                      label="Relationship Status"
-                      value="Single"
+                      label={t("life.relationshipStatus")}
+                      value={t("life.single")}
                       format="text"
                     />
                   </div>
@@ -287,7 +326,7 @@ const WebDevLifeSimulator = () => {
 
                 <div className="energy-actions">
                   <h4 className="text-subsection-title mb-md">
-                    ⚡ Restore Energy
+                    {t("life.restoreEnergy")}
                   </h4>
                   <div className="action-buttons">
                     <Button
@@ -296,11 +335,11 @@ const WebDevLifeSimulator = () => {
                       onClick={() =>
                         showNotification(
                           "success",
-                          "🍕 Enjoyed a delicious meal! +20 Energy"
+                          t("life.energyRestored.food")
                         )
                       }
                     >
-                      🍕 Eat Food
+                      {t("life.eatFood")}
                     </Button>
                     <Button
                       variant="info"
@@ -308,11 +347,11 @@ const WebDevLifeSimulator = () => {
                       onClick={() =>
                         showNotification(
                           "success",
-                          "🎮 Had fun gaming! +15 Energy"
+                          t("life.energyRestored.games")
                         )
                       }
                     >
-                      🎮 Play Games
+                      {t("life.playGames")}
                     </Button>
                     <Button
                       variant="info"
@@ -320,11 +359,11 @@ const WebDevLifeSimulator = () => {
                       onClick={() =>
                         showNotification(
                           "success",
-                          "😴 Good night sleep! +30 Energy"
+                          t("life.energyRestored.sleep")
                         )
                       }
                     >
-                      😴 Sleep
+                      {t("life.sleep")}
                     </Button>
                   </div>
                 </div>
@@ -341,10 +380,15 @@ const WebDevLifeSimulator = () => {
   return (
     <div className="app">
       <div className="container">
+        {/* Language Selector */}
+        <div className="app-language-selector">
+          <LanguageSelector variant="dropdown" />
+        </div>
+
         <header className="app-header">
-          <h1 className="text-game-title">💻 Web Dev Life Simulator</h1>
+          <h1 className="text-game-title">{t("game.title")}</h1>
           <p className="app-subtitle">
-            Welcome back, {character.name}! Ready to code?
+            {t("game.subtitle", { name: character.name })}
           </p>
         </header>
 

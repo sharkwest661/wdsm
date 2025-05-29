@@ -1,0 +1,174 @@
+// src/ui/LanguageSelector/LanguageSelector.module.scss
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+// Dropdown variant
+.languageSelector {
+  position: relative;
+  display: inline-block;
+
+  &__trigger {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    @include spacing("padding", "sm");
+    @include spacing("padding-left", "md");
+    @include spacing("padding-right", "md");
+    background: map-get($colors, "white-overlay");
+    border: 2px solid map-get($colors, "semi-transparent");
+    @include border-radius("medium");
+    @include font-size("secondary");
+    @include font-weight("medium");
+    @include color("primary-text");
+    cursor: pointer;
+    transition: all map-get($transitions, "normal") ease;
+    font-family: $font-family-primary;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      @include shadow("button");
+      transform: translateY(-2px);
+    }
+
+    &:focus {
+      outline: 2px solid map-get($colors, "accent-blue");
+      outline-offset: 2px;
+    }
+  }
+
+  &__flag {
+    @include font-size("body");
+  }
+
+  &__name {
+    @include font-size("secondary");
+  }
+
+  &__arrow {
+    @include font-size("small");
+    transition: transform map-get($transitions, "fast") ease;
+  }
+
+  &__dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: map-get($colors, "white-overlay");
+    border: 2px solid map-get($colors, "semi-transparent");
+    @include border-radius("medium");
+    @include shadow("card");
+    @include spacing("margin-top", "xs");
+    z-index: map-get($z-index, "tooltip");
+    animation: slideUp 0.3s ease-out;
+    backdrop-filter: blur(10px);
+  }
+
+  &__option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    @include spacing("padding", "sm");
+    @include spacing("padding-left", "md");
+    @include spacing("padding-right", "md");
+    background: transparent;
+    border: none;
+    @include font-size("secondary");
+    @include font-weight("medium");
+    @include color("primary-text");
+    cursor: pointer;
+    transition: all map-get($transitions, "fast") ease;
+    font-family: $font-family-primary;
+
+    &:hover {
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    &:first-child {
+      @include border-radius("medium");
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      @include border-radius("medium");
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &--active {
+      background: rgba(102, 126, 234, 0.2);
+      @include color("accent-blue");
+      @include font-weight("semibold");
+    }
+  }
+}
+
+// Button variant
+.languageSelectorButtons {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "md");
+  align-items: center;
+
+  &__label {
+    @include font-size("body");
+    @include font-weight("semibold");
+    @include color("primary-text");
+    opacity: 0.9;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: map-get($spacing, "sm");
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: map-get($breakpoints, "mobile")) {
+  .languageSelector {
+    &__trigger {
+      @include spacing("padding", "xs");
+      @include spacing("padding-left", "sm");
+      @include spacing("padding-right", "sm");
+    }
+
+    &__name {
+      display: none; // Hide language name on mobile, show only flag
+    }
+  }
+
+  .languageSelectorButtons {
+    &__buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+  }
+}
+
+// Dark mode compatibility
+@media (prefers-color-scheme: dark) {
+  .languageSelector {
+    &__trigger,
+    &__dropdown {
+      background: rgba(0, 0, 0, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+
+    &__option {
+      color: white;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &--active {
+        background: rgba(102, 126, 234, 0.3);
+      }
+    }
+  }
+}

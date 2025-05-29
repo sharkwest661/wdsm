@@ -2,6 +2,7 @@
 // components/SkillItem/SkillItem.jsx
 // ==============================================
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Button from "../../ui/Button/Button";
 import styles from "./SkillItem.module.scss";
 
@@ -15,6 +16,8 @@ const SkillItem = ({
   emoji = "🔧",
   description = "",
 }) => {
+  const { t } = useTranslation();
+
   const itemClasses = [
     styles.skillItem,
     isLearned ? styles["skillItem--learned"] : "",
@@ -36,14 +39,14 @@ const SkillItem = ({
             <span
               className={`${styles.skillItem__badge} ${styles["skillItem__badge--learned"]}`}
             >
-              ✓ Learned
+              {t("skills.learned")}
             </span>
           )}
           {isLocked && (
             <span
               className={`${styles.skillItem__badge} ${styles["skillItem__badge--locked"]}`}
             >
-              🔒 Locked
+              {t("skills.locked")}
             </span>
           )}
         </div>
@@ -55,19 +58,27 @@ const SkillItem = ({
 
       {requirements.length > 0 && (
         <div className={styles.skillItem__requirements}>
-          <small>Requires: {requirements.join(", ")}</small>
+          <small>
+            {t("skills.requires", { requirements: requirements.join(", ") })}
+          </small>
         </div>
       )}
 
       <div className={styles.skillItem__footer}>
-        <span className={styles.skillItem__cost}>{cost} points</span>
+        <span className={styles.skillItem__cost}>
+          {t("skills.points", { cost })}
+        </span>
         <Button
           variant={isLearned ? "success" : "primary"}
           size="small"
           disabled={isLocked || isLearned}
           onClick={onLearn}
         >
-          {isLearned ? "Learned" : isLocked ? "Locked" : "Learn"}
+          {isLearned
+            ? t("buttons.learned")
+            : isLocked
+            ? t("buttons.locked")
+            : t("buttons.learn")}
         </Button>
       </div>
     </div>
