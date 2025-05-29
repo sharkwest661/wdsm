@@ -1,0 +1,104 @@
+// ==============================================
+// components/SkillItem/SkillItem.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.skillItem {
+  @include card-base;
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "sm");
+  transition: all map-get($transitions, "normal") ease;
+
+  &--learned {
+    background: rgba(79, 172, 254, 0.1);
+    border-color: rgba(79, 172, 254, 0.3);
+  }
+
+  &--locked {
+    opacity: 0.6;
+    background: rgba(139, 69, 19, 0.1);
+    border-color: rgba(139, 69, 19, 0.2);
+  }
+
+  &:not(&--locked) {
+    @include hover-lift(-3px);
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: map-get($spacing, "sm");
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: map-get($spacing, "sm");
+    flex: 1;
+  }
+
+  &__emoji {
+    @include font-size("card-title");
+    flex-shrink: 0;
+  }
+
+  &__name {
+    @include font-size("body");
+    @include font-weight("semibold");
+    @include color("primary-text");
+  }
+
+  &__badges {
+    display: flex;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__badge {
+    @include font-size("small");
+    @include font-weight("medium");
+    @include spacing("padding", "xs");
+    @include spacing("padding-left", "sm");
+    @include spacing("padding-right", "sm");
+    @include border-radius("small");
+
+    &--learned {
+      background: map-get($gradients, "success");
+      color: white;
+    }
+
+    &--locked {
+      background: rgba(139, 69, 19, 0.2);
+      @include color("secondary-text");
+    }
+  }
+
+  &__description {
+    @include font-size("secondary");
+    @include color("secondary-text");
+    line-height: 1.4;
+  }
+
+  &__requirements {
+    @include font-size("small");
+    @include color("secondary-text");
+    font-style: italic;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    @include spacing("margin-top", "sm");
+    @include spacing("padding-top", "sm");
+    border-top: 1px solid rgba(74, 85, 104, 0.1);
+  }
+
+  &__cost {
+    @include font-size("secondary");
+    @include font-weight("semibold");
+    @include color("accent-blue");
+  }
+}

@@ -1,0 +1,65 @@
+// ==============================================
+// components/Notification/Notification.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.notification {
+  position: fixed;
+  top: map-get($spacing, "lg");
+  right: map-get($spacing, "lg");
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: map-get($spacing, "md");
+  @include spacing("padding", "md");
+  @include spacing("padding-left", "lg");
+  @include border-radius("medium");
+  @include shadow("notification");
+  animation: slideInRight map-get($transitions, "slow") ease-out;
+  z-index: map-get($z-index, "notification");
+  max-width: 400px;
+  min-width: 300px;
+
+  &--success {
+    @include gradient-bg("success");
+    color: white;
+  }
+
+  &--info {
+    @include gradient-bg("info");
+    color: white;
+  }
+
+  &--warning {
+    @include gradient-bg("warning");
+    color: white;
+  }
+
+  &--error {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+  }
+
+  &__message {
+    @include font-size("secondary");
+    @include font-weight("medium");
+    flex: 1;
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    color: inherit;
+    @include font-size("card-title");
+    @include font-weight("bold");
+    cursor: pointer;
+    @include spacing("padding", "xs");
+    @include border-radius("small");
+    transition: background-color map-get($transitions, "fast") ease;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  }
+}

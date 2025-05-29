@@ -1,0 +1,42 @@
+// ==============================================
+// components/Card/Card.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.card {
+  @include card-base;
+
+  &--hoverable {
+    cursor: pointer;
+    @include hover-lift;
+  }
+
+  &--character {
+    @include gradient-bg("character-stats");
+    color: white;
+
+    .card__content {
+      background: rgba(255, 255, 255, 0.1);
+      @include border-radius("medium");
+      @include spacing("padding", "md");
+    }
+  }
+
+  &--skills {
+    @include gradient-bg("skills");
+  }
+
+  &--business {
+    @include gradient-bg("business");
+  }
+
+  &--life {
+    @include gradient-bg("life");
+  }
+
+  &--transparent {
+    background: map-get($colors, "semi-transparent");
+    backdrop-filter: blur(10px);
+  }
+}

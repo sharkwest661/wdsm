@@ -1,0 +1,63 @@
+// ==============================================
+// components/TabNavigation/TabNavigation.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.tabContainer {
+  display: flex;
+  background: map-get($colors, "semi-transparent");
+  @include border-radius("large");
+  @include spacing("padding", "sm");
+  backdrop-filter: blur(10px);
+  @include spacing("margin-bottom", "xl");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    flex-wrap: wrap;
+    gap: map-get($spacing, "xs");
+  }
+}
+
+.tabBtn {
+  flex: 1;
+  @include spacing("padding", "md");
+  @include spacing("padding-left", "sm");
+  @include spacing("padding-right", "sm");
+  background: transparent;
+  border: none;
+  @include border-radius("medium");
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: map-get($spacing, "xs");
+  cursor: pointer;
+  transition: all map-get($transitions, "normal") ease;
+  font-family: $font-family-primary;
+  @include font-weight("medium");
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+  }
+
+  &--active {
+    background: map-get($colors, "white-overlay");
+    @include color("accent-blue");
+    transform: translateY(-2px);
+    @include shadow("button");
+  }
+
+  &__emoji {
+    @include font-size("card-title");
+  }
+
+  &__label {
+    @include font-size("small");
+    @include font-weight("semibold");
+
+    @media (max-width: map-get($breakpoints, "mobile")) {
+      @include font-size("secondary");
+    }
+  }
+}

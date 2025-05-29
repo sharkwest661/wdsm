@@ -1,0 +1,80 @@
+// ==============================================
+// components/Button/Button.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.btn {
+  @include button-base;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: map-get($spacing, "sm");
+
+  &--primary {
+    @include gradient-bg("primary");
+    color: white;
+  }
+
+  &--success {
+    @include gradient-bg("success");
+    color: white;
+  }
+
+  &--warning {
+    @include gradient-bg("warning");
+    color: white;
+  }
+
+  &--info {
+    @include gradient-bg("info");
+    color: white;
+  }
+
+  &--secondary {
+    background: transparent;
+    border: 2px solid map-get($colors, "accent-blue");
+    @include color("accent-blue");
+
+    &:hover:not(:disabled) {
+      background: map-get($colors, "accent-blue");
+      color: white;
+    }
+  }
+
+  &--small {
+    @include spacing("padding", "sm");
+    padding-left: map-get($spacing, "md");
+    padding-right: map-get($spacing, "md");
+    @include font-size("secondary");
+  }
+
+  &--large {
+    @include spacing("padding", "lg");
+    padding-left: map-get($spacing, "xxl");
+    padding-right: map-get($spacing, "xxl");
+    @include font-size("card-title");
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  &--loading {
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  &__spinner {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

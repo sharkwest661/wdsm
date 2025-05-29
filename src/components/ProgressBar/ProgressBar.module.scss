@@ -1,0 +1,86 @@
+// ==============================================
+// components/ProgressBar/ProgressBar.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.progressContainer {
+  width: 100%;
+}
+
+.progressLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "sm");
+
+  &__text {
+    @include font-size("small");
+    @include font-weight("medium");
+    @include color("primary-text");
+  }
+
+  &__percentage {
+    @include font-size("small");
+    @include font-weight("semibold");
+    @include color("accent-blue");
+  }
+}
+
+.progressBar {
+  @include progress-bar-base;
+  position: relative;
+
+  &--small {
+    height: 8px;
+  }
+
+  &--medium {
+    height: 12px;
+  }
+
+  &--large {
+    height: 16px;
+  }
+}
+
+.progressFill {
+  height: 100%;
+  @include border-radius("small");
+  transition: width map-get($transitions, "slow") ease;
+  position: relative;
+
+  &--success {
+    @include gradient-bg("success");
+  }
+
+  &--warning {
+    @include gradient-bg("warning");
+  }
+
+  &--info {
+    @include gradient-bg("info");
+  }
+
+  &--energy {
+    @include gradient-bg("energy");
+  }
+
+  &--animated {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+  }
+}

@@ -1,0 +1,452 @@
+// ==============================================
+// App.scss - Main Application Stylesheet
+// ==============================================
+
+// Import base theme files
+@import "./styles/variables";
+@import "./styles/mixins";
+@import "./styles/animations";
+@import "./styles/base";
+
+// ==============================================
+// App Layout Styles
+// ==============================================
+
+.app {
+  min-height: 100vh;
+  @include gradient-bg("primary");
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  @include spacing("padding", "lg");
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    @include spacing("padding", "md");
+  }
+}
+
+// ==============================================
+// Header Styles
+// ==============================================
+
+.app-header {
+  text-align: center;
+  @include spacing("margin-bottom", "xxl");
+  animation: bounceIn 0.8s ease-out;
+}
+
+.app-subtitle {
+  @include font-size("section-header");
+  @include font-weight("medium");
+  color: rgba(255, 255, 255, 0.9);
+  @include spacing("margin-top", "md");
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+// ==============================================
+// Main Content Styles
+// ==============================================
+
+.app-main {
+  flex: 1;
+  animation: fadeIn 0.6s ease-out 0.2s both;
+}
+
+.tab-content {
+  animation: slideUp 0.4s ease-out;
+}
+
+// ==============================================
+// Character Tab Styles
+// ==============================================
+
+.character-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: map-get($spacing, "xl");
+
+  @media (max-width: map-get($breakpoints, "tablet")) {
+    grid-template-columns: 1fr;
+    gap: map-get($spacing, "lg");
+  }
+}
+
+.character-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  &__avatar {
+    width: 100%;
+  }
+}
+
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  @include font-size("game-title");
+  background: rgba(255, 255, 255, 0.2);
+  @include border-radius("large");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto map-get($spacing, "lg");
+  animation: pulse 3s infinite;
+}
+
+.character-name {
+  @include font-size("section-header");
+  @include font-weight("bold");
+  color: white;
+  @include spacing("margin-bottom", "sm");
+}
+
+.character-age {
+  @include font-size("body");
+  @include font-weight("medium");
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.stats-card {
+  .stats-grid {
+    display: grid;
+    gap: map-get($spacing, "md");
+  }
+
+  .energy-section {
+    @include spacing("padding-top", "lg");
+    border-top: 1px solid rgba(74, 85, 104, 0.1);
+  }
+}
+
+// ==============================================
+// Skills Tab Styles
+// ==============================================
+
+.skills-info {
+  @include spacing("padding", "lg");
+  background: rgba(102, 126, 234, 0.1);
+  @include border-radius("medium");
+  text-align: center;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: map-get($spacing, "lg");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    grid-template-columns: 1fr;
+    gap: map-get($spacing, "md");
+  }
+}
+
+// ==============================================
+// Career Tab Styles
+// ==============================================
+
+.career-info {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .action-buttons {
+    display: flex;
+    gap: map-get($spacing, "md");
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @media (max-width: map-get($breakpoints, "mobile")) {
+      flex-direction: column;
+    }
+  }
+}
+
+// ==============================================
+// Business Tab Styles
+// ==============================================
+
+.business-info {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+
+  .progress-section {
+    background: rgba(255, 255, 255, 0.1);
+    @include border-radius("medium");
+    @include spacing("padding", "lg");
+  }
+}
+
+// ==============================================
+// Life Tab Styles
+// ==============================================
+
+.life-sections {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.life-stats {
+  .life-stat-row {
+    @include spacing("margin-bottom", "md");
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.energy-actions {
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(74, 85, 104, 0.1);
+  text-align: center;
+
+  .action-buttons {
+    display: flex;
+    gap: map-get($spacing, "md");
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @media (max-width: map-get($breakpoints, "mobile")) {
+      flex-direction: column;
+    }
+  }
+}
+
+// ==============================================
+// Responsive Utilities
+// ==============================================
+
+@media (max-width: map-get($breakpoints, "mobile")) {
+  .character-layout {
+    .avatar-placeholder {
+      width: 100px;
+      height: 100px;
+      @include font-size("card-title");
+    }
+
+    .character-name {
+      @include font-size("card-title");
+    }
+  }
+
+  .skills-grid {
+    .skill-item {
+      @include spacing("padding", "md");
+    }
+  }
+
+  .stats-grid {
+    gap: map-get($spacing, "sm");
+  }
+}
+
+// ==============================================
+// Loading and Skeleton States
+// ==============================================
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  @include border-radius("small");
+
+  &--text {
+    height: 1em;
+    margin-bottom: 0.5em;
+
+    &:last-child {
+      margin-bottom: 0;
+      width: 60%;
+    }
+  }
+
+  &--avatar {
+    width: 120px;
+    height: 120px;
+    @include border-radius("large");
+  }
+
+  &--button {
+    height: 48px;
+    width: 120px;
+  }
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// ==============================================
+// Focus and Accessibility Styles
+// ==============================================
+
+// Focus styles for keyboard navigation
+*:focus {
+  outline: 2px solid map-get($colors, "accent-blue");
+  outline-offset: 2px;
+}
+
+// Skip link for screen readers
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: map-get($colors, "accent-blue");
+  color: white;
+  @include spacing("padding", "sm");
+  @include border-radius("small");
+  text-decoration: none;
+  z-index: map-get($z-index, "modal");
+
+  &:focus {
+    top: 6px;
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .avatar-placeholder {
+    animation: none;
+  }
+
+  .app-header {
+    animation: none;
+  }
+
+  .app-main {
+    animation: none;
+  }
+
+  .tab-content {
+    animation: none;
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .card {
+    border: 2px solid #000;
+  }
+
+  .btn {
+    border: 2px solid #000;
+  }
+}
+
+// ==============================================
+// Print Styles
+// ==============================================
+
+@media print {
+  .app {
+    background: white !important;
+  }
+
+  .tab-container,
+  .notification {
+    display: none !important;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}
+
+// ==============================================
+// Custom Scrollbar Styles
+// ==============================================
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  @include gradient-bg("primary");
+  border-radius: 4px;
+
+  &:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6b4c93 100%);
+  }
+}
+
+// ==============================================
+// Error Boundary Styles
+// ==============================================
+
+.error-boundary {
+  @include card-base;
+  text-align: center;
+  @include spacing("padding", "xxl");
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+  color: white;
+
+  h2 {
+    @include font-size("section-header");
+    @include spacing("margin-bottom", "lg");
+  }
+
+  p {
+    @include font-size("body");
+    @include spacing("margin-bottom", "lg");
+  }
+
+  details {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    @include border-radius("medium");
+    @include spacing("padding", "md");
+
+    summary {
+      cursor: pointer;
+      @include font-weight("semibold");
+      @include spacing("margin-bottom", "sm");
+    }
+
+    pre {
+      @include font-size("small");
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+}
+
+// ==============================================
+// Development Helper Styles (remove in production)
+// ==============================================
+
+.dev-helper {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  @include spacing("padding", "sm");
+  @include border-radius("small");
+  @include font-size("small");
+  z-index: map-get($z-index, "notification");
+
+  @media (min-width: map-get($breakpoints, "desktop")) {
+    display: none;
+  }
+}

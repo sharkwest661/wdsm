@@ -1,0 +1,226 @@
+// ==============================================
+// styles/_base.scss
+// ==============================================
+
+// Global Resets and Base Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: $font-family-primary;
+  @include font-size("body");
+  @include font-weight("medium");
+  @include color("primary-text");
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  @include gradient-bg("primary");
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+
+  // Background floating elements
+  &::before {
+    content: "💻 🚀 ⚡ 🎮";
+    position: fixed;
+    top: 10%;
+    left: 10%;
+    font-size: 2rem;
+    opacity: 0.1;
+    z-index: -1;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  &::after {
+    content: "🔧 📊 💡 🎯";
+    position: fixed;
+    bottom: 10%;
+    right: 10%;
+    font-size: 1.5rem;
+    opacity: 0.1;
+    z-index: -1;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+}
+
+// Typography Base Classes
+.text-game-title {
+  @include font-size("game-title");
+  @include font-weight("bold");
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.text-section-header {
+  @include font-size("section-header");
+  @include font-weight("semibold");
+  @include color("primary-text");
+}
+
+.text-card-title {
+  @include font-size("card-title");
+  @include font-weight("semibold");
+  @include color("primary-text");
+}
+
+.text-body {
+  @include font-size("body");
+  @include font-weight("medium");
+  @include color("primary-text");
+}
+
+.text-secondary {
+  @include font-size("secondary");
+  @include font-weight("normal");
+  @include color("secondary-text");
+}
+
+.text-small {
+  @include font-size("small");
+  @include font-weight("medium");
+}
+
+// Utility Classes
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+// Responsive Container
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  @include spacing("padding", "lg");
+
+  @include respond-to("mobile") {
+    @include spacing("padding", "md");
+  }
+}
+
+// Layout Utilities
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.grid {
+  display: grid;
+}
+
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: map-get($spacing, "lg");
+}
+
+.grid-two-col {
+  grid-template-columns: 1fr 1fr;
+  gap: map-get($spacing, "lg");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Spacing Utilities
+@each $name, $value in $spacing {
+  .m-#{$name} {
+    margin: $value;
+  }
+  .mt-#{$name} {
+    margin-top: $value;
+  }
+  .mr-#{$name} {
+    margin-right: $value;
+  }
+  .mb-#{$name} {
+    margin-bottom: $value;
+  }
+  .ml-#{$name} {
+    margin-left: $value;
+  }
+  .mx-#{$name} {
+    margin-left: $value;
+    margin-right: $value;
+  }
+  .my-#{$name} {
+    margin-top: $value;
+    margin-bottom: $value;
+  }
+
+  .p-#{$name} {
+    padding: $value;
+  }
+  .pt-#{$name} {
+    padding-top: $value;
+  }
+  .pr-#{$name} {
+    padding-right: $value;
+  }
+  .pb-#{$name} {
+    padding-bottom: $value;
+  }
+  .pl-#{$name} {
+    padding-left: $value;
+  }
+  .px-#{$name} {
+    padding-left: $value;
+    padding-right: $value;
+  }
+  .py-#{$name} {
+    padding-top: $value;
+    padding-bottom: $value;
+  }
+}
+
+// Gap Utilities
+@each $name, $value in $spacing {
+  .gap-#{$name} {
+    gap: $value;
+  }
+}
+
+// Accessibility
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

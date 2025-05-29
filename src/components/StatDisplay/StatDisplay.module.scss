@@ -1,0 +1,64 @@
+// ==============================================
+// components/StatDisplay/StatDisplay.module.scss
+// ==============================================
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.statDisplay {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  @include spacing("padding", "md");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+
+  &--default {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &--highlighted {
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  &--small {
+    @include spacing("padding", "sm");
+    gap: map-get($spacing, "sm");
+  }
+
+  &--large {
+    @include spacing("padding", "lg");
+    gap: map-get($spacing, "lg");
+  }
+
+  &__emoji {
+    @include font-size("card-title");
+    flex-shrink: 0;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__label {
+    @include font-size("small");
+    @include font-weight("medium");
+    opacity: 0.8;
+    margin-bottom: 2px;
+  }
+
+  &__value {
+    @include font-size("body");
+    @include font-weight("semibold");
+    display: flex;
+    align-items: baseline;
+    gap: map-get($spacing, "xs");
+  }
+
+  &__max {
+    @include font-size("secondary");
+    @include font-weight("normal");
+    opacity: 0.7;
+  }
+}

@@ -1,0 +1,122 @@
+// ==============================================
+// styles/_mixins.scss
+// ==============================================
+
+// Font Size Mixin
+@mixin font-size($size-name) {
+  font-size: map-get($font-sizes, $size-name);
+}
+
+// Font Weight Mixin
+@mixin font-weight($weight-name) {
+  font-weight: map-get($font-weights, $weight-name);
+}
+
+// Gradient Background Mixin
+@mixin gradient-bg($gradient-name) {
+  background: map-get($gradients, $gradient-name);
+}
+
+// Color Mixin
+@mixin color($color-name) {
+  color: map-get($colors, $color-name);
+}
+
+// Spacing Mixin
+@mixin spacing($property, $size-name) {
+  #{$property}: map-get($spacing, $size-name);
+}
+
+// Border Radius Mixin
+@mixin border-radius($size-name) {
+  border-radius: map-get($border-radius, $size-name);
+}
+
+// Shadow Mixin
+@mixin shadow($shadow-name) {
+  box-shadow: map-get($shadows, $shadow-name);
+}
+
+// Responsive Mixin
+@mixin respond-to($breakpoint) {
+  @media (min-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}
+
+// Card Base Mixin
+@mixin card-base {
+  background: map-get($colors, "white-overlay");
+  @include border-radius("large");
+  @include spacing("padding", "lg");
+  @include shadow("card");
+  border: 3px solid map-get($colors, "semi-transparent");
+  transition: transform map-get($transitions, "normal") ease;
+}
+
+// Button Base Mixin
+@mixin button-base {
+  @include spacing("padding", "md");
+  padding-left: map-get($spacing, "xl");
+  padding-right: map-get($spacing, "xl");
+  border: none;
+  @include border-radius("medium");
+  font-family: $font-family-primary;
+  @include font-weight("semibold");
+  @include font-size("button");
+  cursor: pointer;
+  transition: all map-get($transitions, "normal") ease;
+  @include shadow("button");
+
+  &:hover:not(:disabled) {
+    transform: translateY(-3px);
+    @include shadow("button-hover");
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// Hover Effect Mixin
+@mixin hover-lift($distance: -5px) {
+  transition: transform map-get($transitions, "normal") ease;
+
+  &:hover {
+    transform: translateY($distance);
+  }
+}
+
+// Progress Bar Mixin
+@mixin progress-bar-base {
+  width: 100%;
+  background: map-get($colors, "semi-transparent");
+  @include border-radius("small");
+  overflow: hidden;
+}
+
+// Progress Fill Mixin
+@mixin progress-fill($gradient-name: "success") {
+  height: 100%;
+  background: map-get($gradients, $gradient-name);
+  @include border-radius("small");
+  transition: width map-get($transitions, "slow") ease;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+}
