@@ -1,0 +1,27 @@
+// src/ui/Avatar/Avatar.module.scss
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  @include border-radius("large");
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 3px solid rgba(255, 255, 255, 0.2);
+  transition: all map-get($transitions, "normal") ease;
+
+  &:hover {
+    transform: scale(1.05);
+    @include shadow("button");
+  }
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

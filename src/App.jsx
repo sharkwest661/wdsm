@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import Avatar, { genConfig } from "react-nice-avatar";
 
 // Clean imports from organized folders
 import {
@@ -10,6 +9,7 @@ import {
   TabNavigation,
   StatDisplay,
   Notification,
+  Avatar,
 } from "./ui";
 
 import LanguageSelector from "./ui/LanguageSelector/LanguageSelector";
@@ -60,14 +60,6 @@ const WebDevLifeSimulator = () => {
   if (!gameSetup.isCharacterCreated) {
     return <CharacterCreation />;
   }
-
-  // Generate avatar config for display
-  const avatarConfig = genConfig({
-    sex: character.avatar.sex,
-    seed: character.avatar.seed,
-  });
-
-  console.log("Avatar Config:", avatarConfig, character.avatar.seed);
 
   const tabs = [
     { id: "character", emoji: "👤", label: t("tabs.character") },
@@ -142,8 +134,10 @@ const WebDevLifeSimulator = () => {
                 <div className="character-card__avatar">
                   <div className="avatar-placeholder">
                     <Avatar
-                      style={{ width: "120px", height: "120px" }}
-                      {...avatarConfig}
+                      size={120}
+                      seed={character.avatar.seed}
+                      backgroundColor={character.avatar.backgroundColor}
+                      primaryColor={character.avatar.primaryColor}
                     />
                   </div>
                   <h2 className="character-name">{character.name}</h2>

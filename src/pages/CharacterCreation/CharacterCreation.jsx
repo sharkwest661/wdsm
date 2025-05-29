@@ -1,9 +1,9 @@
 // src/pages/CharacterCreation/CharacterCreation.jsx
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import Avatar, { genConfig } from "react-nice-avatar";
 import Card from "../../ui/Card/Card";
 import Button from "../../ui/Button/Button";
+import Avatar from "../../ui/Avatar/Avatar";
 import LanguageSelector from "../../ui/LanguageSelector/LanguageSelector";
 import useGameStore from "../../store/gameStore";
 import styles from "./CharacterCreation.module.scss";
@@ -21,7 +21,7 @@ const CharacterCreation = () => {
   const setLanguage = useGameStore((state) => state.setLanguage);
 
   const [characterName, setCharacterName] = useState("");
-  const [selectedGender, setSelectedGender] = useState(character.avatar.sex);
+  const [selectedGender, setSelectedGender] = useState(character.gender);
 
   // Sync language changes with store
   useEffect(() => {
@@ -35,22 +35,13 @@ const CharacterCreation = () => {
     };
   }, [i18n, setLanguage]);
 
-  const avatarConfig = useMemo(
-    () =>
-      genConfig({
-        sex: selectedGender,
-        seed: character.avatar.seed,
-      }),
-    [selectedGender, character.avatar.seed]
-  );
-
   const handleGenderChange = (newGender) => {
     setSelectedGender(newGender);
-    updateAvatar({ sex: newGender });
+    // Gender is for gameplay only, doesn't affect avatar
   };
 
   const handleRandomizeAvatar = () => {
-    generateRandomAvatar(selectedGender);
+    generateRandomAvatar();
   };
 
   const handleStartGame = () => {
@@ -59,11 +50,13 @@ const CharacterCreation = () => {
       return;
     }
 
+    // Create character with current avatar state and name
     createCharacter({
       name: characterName.trim(),
+      gender: selectedGender, // Gender for gameplay
       avatar: {
-        sex: selectedGender,
-        seed: character.avatar.seed,
+        ...character.avatar, // Use current avatar state
+        seed: characterName.trim(), // Set seed to character name for consistency
       },
     });
   };
@@ -90,8 +83,10 @@ const CharacterCreation = () => {
             <div className={styles.avatarSection}>
               <div className={styles.avatarContainer}>
                 <Avatar
-                  style={{ width: "180px", height: "180px" }}
-                  {...avatarConfig}
+                  size={180}
+                  seed={character.avatar.seed}
+                  backgroundColor={character.avatar.backgroundColor}
+                  primaryColor={character.avatar.primaryColor}
                 />
               </div>
 
@@ -103,19 +98,19 @@ const CharacterCreation = () => {
                   <div className={styles.genderButtons}>
                     <Button
                       variant={
-                        selectedGender === "man" ? "primary" : "secondary"
+                        selectedGender === "male" ? "primary" : "secondary"
                       }
                       size="medium"
-                      onClick={() => handleGenderChange("man")}
+                      onClick={() => handleGenderChange("male")}
                     >
                       {t("characterCreation.male")}
                     </Button>
                     <Button
                       variant={
-                        selectedGender === "woman" ? "primary" : "secondary"
+                        selectedGender === "female" ? "primary" : "secondary"
                       }
                       size="medium"
-                      onClick={() => handleGenderChange("woman")}
+                      onClick={() => handleGenderChange("female")}
                     >
                       {t("characterCreation.female")}
                     </Button>

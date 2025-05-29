@@ -245,6 +245,19 @@
   animation: fadeIn 1s ease-out 0.5s both;
 }
 
+.languageSelector {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: map-get($z-index, "header");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    position: relative;
+    margin-bottom: map-get($spacing, "md");
+    text-align: right;
+  }
+}
+
 // Responsive adjustments
 @media (max-width: map-get($breakpoints, "tablet")) {
   .content {
@@ -294,54 +307,47 @@
     @include font-size("body");
   }
 
-  .avatarContainer {
-    svg {
-      width: 120px !important;
-      height: 120px !important;
-    }
+  // Loading and hover states
+  .nameInput:hover {
+    border-color: rgba(102, 126, 234, 0.5);
   }
-}
 
-// Loading and hover states
-.nameInput:hover {
-  border-color: rgba(102, 126, 234, 0.5);
-}
+  .statItem:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
 
-.statItem:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
+  .skillBadge:hover {
+    background: rgba(79, 172, 254, 0.3);
+    transform: translateY(-1px);
+  }
 
-.skillBadge:hover {
-  background: rgba(79, 172, 254, 0.3);
-  transform: translateY(-1px);
-}
+  // Focus states for accessibility
+  .nameInput:focus,
+  .genderButtons button:focus {
+    outline: 2px solid map-get($colors, "accent-blue");
+    outline-offset: 2px;
+  }
 
-// Focus states for accessibility
-.nameInput:focus,
-.genderButtons button:focus {
-  outline: 2px solid map-get($colors, "accent-blue");
-  outline-offset: 2px;
-}
+  // Reduced motion preferences
+  @media (prefers-reduced-motion: reduce) {
+    .characterCreation {
+      &::before,
+      &::after {
+        animation: none;
+      }
+    }
 
-// Reduced motion preferences
-@media (prefers-reduced-motion: reduce) {
-  .characterCreation {
-    &::before,
-    &::after {
+    .container {
       animation: none;
     }
-  }
 
-  .container {
-    animation: none;
-  }
+    .avatarContainer {
+      animation: none;
+    }
 
-  .avatarContainer {
-    animation: none;
-  }
-
-  .footer {
-    animation: none;
+    .footer {
+      animation: none;
+    }
   }
 }
