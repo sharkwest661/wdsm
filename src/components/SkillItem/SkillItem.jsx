@@ -2,7 +2,7 @@
 // components/SkillItem/SkillItem.jsx
 // ==============================================
 import React from "react";
-import Button from "../Button/Button";
+import Button from "../../ui/Button/Button";
 import styles from "./SkillItem.module.scss";
 
 const SkillItem = ({

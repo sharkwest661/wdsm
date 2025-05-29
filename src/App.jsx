@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Card from "./components/Card/Card";
-import Button from "./components/Button/Button";
-import ProgressBar from "./components/ProgressBar/ProgressBar";
-import TabNavigation from "./components/TabNavigation/TabNavigation";
-import StatDisplay from "./components/StatDisplay/StatDisplay";
-import Notification from "./components/Notification/Notification";
+import Card from "./ui/Card/Card";
+import Button from "./ui/Button/Button";
+import ProgressBar from "./ui/ProgressBar/ProgressBar";
+import TabNavigation from "./ui/TabNavigation/TabNavigation";
+import StatDisplay from "./ui/StatDisplay/StatDisplay";
+import Notification from "./ui/Notification/Notification";
 import SkillItem from "./components/SkillItem/SkillItem";
 import "./App.scss";
 
