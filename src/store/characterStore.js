@@ -16,7 +16,7 @@ const useCharacterStore = create(
         money: 1500,
         reputation: 10,
         energy: 75,
-        skillPoints: 12, // For learning technical skills (JS, React, etc.)
+        skillPoints: 0, // For learning technical skills (JS, React, etc.)
         education: "none",
         currentJob: null,
         jobPerformance: 0,
@@ -74,7 +74,7 @@ const useCharacterStore = create(
 
         // Validation
         if (availablePoints < pointsToSpend) return false;
-        if (currentSkill >= 10) return false; // Max skill level
+        if (currentSkill >= 7) return false; // Max skill level
         if (
           !["technical", "business", "social", "creativity"].includes(skillName)
         )
@@ -86,7 +86,7 @@ const useCharacterStore = create(
             ...state.character,
             characterSkills: {
               ...state.character.characterSkills,
-              [skillName]: Math.min(10, currentSkill + pointsToSpend),
+              [skillName]: Math.min(7, currentSkill + pointsToSpend),
             },
             availableCharacterSkillPoints: availablePoints - pointsToSpend,
           },
@@ -94,6 +94,39 @@ const useCharacterStore = create(
 
         return true;
       },
+
+      // New methods for characterStore.js
+      earnSkillPointsFromInterview: (success = false) => {
+        // Even failed interviews teach something
+        const pointsEarned = success ? 2 : 1;
+        set((state) => ({
+          character: {
+            ...state.character,
+            skillPoints: state.character.skillPoints + pointsEarned,
+          },
+        }));
+        return pointsEarned;
+      },
+
+      earnSkillPointsFromCodingChallenge: (difficulty = "medium") => {
+        const pointMap = {
+          easy: 1,
+          medium: 2,
+          hard: 3,
+        };
+        const points = pointMap[difficulty] || 1;
+
+        set((state) => ({
+          character: {
+            ...state.character,
+            skillPoints: state.character.skillPoints + points,
+          },
+        }));
+        return points;
+      },
+
+      // Update the completeWorkDay method in careerStore.js to enhance skill points
+      // (This already exists but we'll improve it)
 
       // ==========================================
       // EDUCATION PROGRESSION BONUSES

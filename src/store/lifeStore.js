@@ -162,6 +162,29 @@ const useLifeStore = create(
       },
 
       // ==========================================
+      // CODING PRACTICE
+      // ==========================================
+      practiceCoding: (characterStore) => {
+        const energyCost = 20;
+        const skillPointsGained = 1;
+
+        if (characterStore.getState().character.energy >= energyCost) {
+          characterStore.getState().consumeEnergy(energyCost);
+          characterStore.getState().addSkillPoints(skillPointsGained);
+          return {
+            success: true,
+            message: "Completed coding practice! +1 Skill Point",
+            skillPointsGained,
+          };
+        }
+
+        return {
+          success: false,
+          message: "Not enough energy to practice coding!",
+        };
+      },
+
+      // ==========================================
       // RESET LIFE
       // ==========================================
       resetLife: () =>

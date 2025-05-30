@@ -16,6 +16,7 @@ import LanguageSelector from "./ui/LanguageSelector/LanguageSelector";
 
 import { SkillItem } from "./components";
 import CharacterSkillManager from "./components/CharacterSkillManager/CharacterSkillManager";
+import ProjectCreation from "./components/ProjectCreation/ProjectCreation";
 import { CharacterCreation } from "./pages";
 
 // Import modular stores
@@ -25,6 +26,7 @@ import {
   useSkillsStore,
   useCareerStore,
   useLifeStore,
+  useBusinessStore,
   useNotificationStore,
 } from "./store";
 
@@ -33,7 +35,7 @@ import "./App.scss";
 const WebDevLifeSimulator = () => {
   const { t, i18n } = useTranslation();
 
-  // Correct Zustand usage - selective state picking from modular stores
+  // Character and general app state
   const character = useCharacterStore((state) => state.character);
   const gameSetup = useAppStore((state) => state.gameSetup);
   const language = useAppStore((state) => state.language);
@@ -49,10 +51,18 @@ const WebDevLifeSimulator = () => {
   const applyForJob = useCareerStore((state) => state.applyForJob);
   const completeWorkDay = useCareerStore((state) => state.completeWorkDay);
 
+  // Business store (moved from inside case statement)
+  const products = useBusinessStore((state) => state.business.products);
+  const ideas = useBusinessStore((state) => state.business.ideas);
+  const totalMonthlyIncome = useBusinessStore((state) =>
+    state.getMonthlyBusinessIncome()
+  );
+
   // Life store actions
   const eatFood = useLifeStore((state) => state.eatFood);
   const playGames = useLifeStore((state) => state.playGames);
   const sleep = useLifeStore((state) => state.sleep);
+  const practiceCoding = useLifeStore((state) => state.practiceCoding);
 
   // Character store actions
   const takeExam = useCharacterStore((state) => state.takeExam);
@@ -80,6 +90,7 @@ const WebDevLifeSimulator = () => {
 
   const [activeTab, setActiveTab] = useState("character");
   const [showSkillManager, setShowSkillManager] = useState(false);
+  const [showProjectCreation, setShowProjectCreation] = useState(false);
 
   // Get current job
   const currentJob = getCurrentJob();
@@ -142,8 +153,16 @@ const WebDevLifeSimulator = () => {
 
   // Handle new day
   const handleNewDay = () => {
-    startNewDay();
+    const result = startNewDay();
     showNotification("info", t("game.newDay"));
+
+    // Show notification for business income if any
+    if (result && result.businessIncome > 0) {
+      showNotification(
+        "success",
+        t("business.incomeGenerated", { amount: result.businessIncome })
+      );
+    }
   };
 
   // Handle character skill improvement
@@ -183,6 +202,16 @@ const WebDevLifeSimulator = () => {
   const handleSleep = () => {
     const result = sleep(useCharacterStore);
     showNotification("success", t("life.energyRestored.sleep"));
+  };
+
+  // Handle practice coding activity
+  const handlePracticeCoding = () => {
+    const result = practiceCoding(useCharacterStore);
+    if (result.success) {
+      showNotification("success", result.message);
+    } else {
+      showNotification("warning", result.message);
+    }
   };
 
   // Handle skill development activities
@@ -393,7 +422,7 @@ const WebDevLifeSimulator = () => {
                           <span className="skill-name">
                             {t(`characterCreation.skillNames.${skillName}`)}
                           </span>
-                          <span className="skill-level">{level}/10</span>
+                          <span className="skill-level">{level}/7</span>
                         </div>
                       )
                     )}
@@ -600,33 +629,111 @@ const WebDevLifeSimulator = () => {
         );
 
       case "business":
+        // No hooks here, just use the values from above
         const canCreateProducts =
           character.education === "university" ||
           character.education === "academy";
+
+        const handleCreateProduct = () => {
+          if (!canCreateProducts) {
+            showNotification("warning", t("business.requiresUniversity"));
+            return;
+          }
+          setShowProjectCreation(true);
+        };
 
         return (
           <div className="tab-content">
             <Card variant="business">
               <h3 className="text-card-title mb-lg">{t("business.title")}</h3>
-              <div className="business-info">
-                <p className="text-body mb-md">{t("business.readyToStart")}</p>
-                <p className="text-secondary mb-lg">
-                  {t("business.description")}
-                </p>
 
-                <div className="progress-section mb-lg">
-                  <ProgressBar
-                    progress={0}
-                    max={100}
-                    variant="warning"
-                    label={t("business.productIdeas")}
-                    showPercentage={false}
-                  />
+              {/* Business Overview */}
+              <div className="business-info mb-lg">
+                <StatDisplay
+                  emoji="💰"
+                  label={t("business.monthlyIncome") || "Monthly Income"}
+                  value={totalMonthlyIncome}
+                  format="currency"
+                  variant="highlighted"
+                  size="large"
+                />
+
+                <div className="business-stats mt-lg">
+                  <div className="stats-row">
+                    <StatDisplay
+                      emoji="🏗️"
+                      label={
+                        t("business.productsCreated") || "Products Created"
+                      }
+                      value={products.length}
+                      format="number"
+                    />
+                    <StatDisplay
+                      emoji="💡"
+                      label={t("business.ideasGenerated") || "Ideas Generated"}
+                      value={ideas.length}
+                      format="number"
+                    />
+                  </div>
                 </div>
+              </div>
 
+              {/* Products List */}
+              {products.length > 0 && (
+                <div className="products-section mb-lg">
+                  <h4 className="text-subsection-title mb-md">
+                    🚀 {t("business.yourProducts") || "Your Products"}
+                  </h4>
+                  <div className="products-grid">
+                    {products.map((product) => (
+                      <div key={product.id} className="product-item">
+                        <div className="product-header">
+                          <h5 className="product-title">{product.name}</h5>
+                          <span
+                            className={`product-status ${
+                              product.isSuccessful ? "success" : "warning"
+                            }`}
+                          >
+                            {product.isSuccessful
+                              ? t("business.successful") || "Successful"
+                              : t("business.struggling") || "Struggling"}
+                          </span>
+                        </div>
+                        <p className="product-type">
+                          {t(`business.productTypes.${product.type}`) ||
+                            product.type}
+                        </p>
+                        <div className="product-revenue">
+                          <span className="revenue-label">
+                            {t("business.monthlyRevenue") || "Monthly Revenue"}:
+                          </span>
+                          <span className="revenue-value">
+                            {product.monthlyRevenue}₼
+                          </span>
+                        </div>
+                        <div className="product-total">
+                          <span className="total-label">
+                            {t("business.totalRevenue") || "Total Revenue"}:
+                          </span>
+                          <span className="total-value">
+                            {product.totalRevenue || 0}₼
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Create New Product Button */}
+              <div className="create-product-section">
                 {canCreateProducts ? (
-                  <Button variant="warning" size="large">
-                    {t("business.createFirstProduct")}
+                  <Button
+                    variant="warning"
+                    size="large"
+                    onClick={handleCreateProduct}
+                  >
+                    {t("business.createNewProduct") || "🏗️ Create New Product"}
                   </Button>
                 ) : (
                   <div>
@@ -643,6 +750,11 @@ const WebDevLifeSimulator = () => {
                 )}
               </div>
             </Card>
+
+            {/* Project Creation Modal */}
+            {showProjectCreation && (
+              <ProjectCreation onClose={() => setShowProjectCreation(false)} />
+            )}
           </div>
         );
 
@@ -736,6 +848,14 @@ const WebDevLifeSimulator = () => {
                       disabled={character.money < 50 || character.energy < 15}
                     >
                       {t("life.doCreativeHobby")}
+                    </Button>
+                    <Button
+                      variant="success"
+                      size="medium"
+                      onClick={handlePracticeCoding}
+                      disabled={character.energy < 20}
+                    >
+                      {t("life.practiceCoding") || "💻 Practice Coding (Free)"}
                     </Button>
                   </div>
                 </div>

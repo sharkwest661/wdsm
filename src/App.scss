@@ -177,6 +177,7 @@
   }
 }
 
+/* Alternative fix: Change text color instead of background */
 .character-skill-item {
   display: flex;
   justify-content: space-between;
@@ -188,7 +189,7 @@
   .skill-name {
     @include font-size("secondary");
     @include font-weight("medium");
-    color: rgba(255, 255, 255, 0.9);
+    color: #4a5568; /* Dark text color instead of white */
   }
 
   .skill-level {

@@ -21,28 +21,28 @@ const CharacterSkillManager = ({ character, onImproveSkill, onClose }) => {
       name: t("characterCreation.skillNames.technical"),
       description: t("characterCreation.skills.technical"),
       currentLevel: currentSkills.technical,
-      maxLevel: 10,
+      maxLevel: 7,
     },
     business: {
       emoji: "💼",
       name: t("characterCreation.skillNames.business"),
       description: t("characterCreation.skills.business"),
       currentLevel: currentSkills.business,
-      maxLevel: 10,
+      maxLevel: 7,
     },
     social: {
       emoji: "🤝",
       name: t("characterCreation.skillNames.social"),
       description: t("characterCreation.skills.social"),
       currentLevel: currentSkills.social,
-      maxLevel: 10,
+      maxLevel: 7,
     },
     creativity: {
       emoji: "💡",
       name: t("characterCreation.skillNames.creativity"),
       description: t("characterCreation.skills.creativity"),
       currentLevel: currentSkills.creativity,
-      maxLevel: 10,
+      maxLevel: 7,
     },
   };
 

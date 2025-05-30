@@ -1,0 +1,559 @@
+// src/components/ProjectCreation/ProjectCreation.module.scss
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.projectCreationOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: map-get($z-index, "modal");
+  @include spacing("padding", "lg");
+  animation: fadeIn 0.3s ease-out;
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    @include spacing("padding", "md");
+  }
+}
+
+.projectCreationCard {
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  @include gradient-bg("business");
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "lg");
+}
+
+.title {
+  @include font-size("card-title");
+  @include font-weight("bold");
+  margin: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "lg");
+}
+
+// Stage common styles
+.stageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "lg");
+  flex-wrap: wrap;
+  gap: map-get($spacing, "md");
+}
+
+.stageTitle {
+  @include font-size("body");
+  @include font-weight("semibold");
+  margin: 0;
+}
+
+// Ideation stage
+.ideationStage {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "lg");
+}
+
+.ideasList {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "md");
+  max-height: 400px;
+  overflow-y: auto;
+  @include spacing("padding-right", "sm");
+}
+
+.emptyState {
+  @include spacing("padding", "xl");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  text-align: center;
+
+  p {
+    @include font-size("secondary");
+    opacity: 0.8;
+    margin: 0;
+  }
+}
+
+.ideaItem {
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all map-get($transitions, "normal") ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &.ideaItemSelected {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+    @include shadow("card");
+  }
+}
+
+.ideaHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "sm");
+  flex-wrap: wrap;
+  gap: map-get($spacing, "sm");
+}
+
+.ideaTitle {
+  @include font-size("body");
+  @include font-weight("semibold");
+  margin: 0;
+}
+
+.ideaType {
+  @include font-size("small");
+  @include font-weight("medium");
+  @include spacing("padding", "xs");
+  @include spacing("padding-left", "sm");
+  @include spacing("padding-right", "sm");
+  background: rgba(255, 255, 255, 0.2);
+  @include border-radius("small");
+}
+
+.ideaDescription {
+  @include font-size("secondary");
+  opacity: 0.9;
+  line-height: 1.4;
+  @include spacing("margin-bottom", "md");
+  margin: 0 0 map-get($spacing, "md") 0;
+}
+
+.ideaDetails {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "sm");
+}
+
+.ideaQuality {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "sm");
+}
+
+.qualityLabel {
+  @include font-size("small");
+  opacity: 0.8;
+}
+
+.qualityValue {
+  @include font-size("secondary");
+  @include font-weight("semibold");
+  color: #4facfe;
+}
+
+.ideaSkills {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "xs");
+}
+
+.skillsLabel {
+  @include font-size("small");
+  opacity: 0.8;
+}
+
+.skillsList {
+  display: flex;
+  gap: map-get($spacing, "xs");
+  flex-wrap: wrap;
+}
+
+.skillBadge {
+  @include font-size("small");
+  @include font-weight("medium");
+  @include spacing("padding", "xs");
+  @include spacing("padding-left", "sm");
+  @include spacing("padding-right", "sm");
+  @include border-radius("small");
+
+  &.skillKnown {
+    background: rgba(79, 172, 254, 0.3);
+    border: 1px solid rgba(79, 172, 254, 0.5);
+  }
+
+  &.skillUnknown {
+    background: rgba(250, 112, 154, 0.3);
+    border: 1px solid rgba(250, 112, 154, 0.5);
+    text-decoration: line-through;
+  }
+}
+
+.actionSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  @include spacing("margin-top", "md");
+}
+
+.warningText {
+  @include font-size("small");
+  color: #fa709a;
+  margin: 0;
+}
+
+.infoText {
+  @include font-size("small");
+  opacity: 0.8;
+  margin: 0;
+}
+
+// Development stage
+.developmentStage {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "lg");
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  margin-bottom: map-get($spacing, "md");
+}
+
+.productTitle {
+  @include font-size("card-title");
+  @include font-weight("semibold");
+  margin: 0;
+  margin-bottom: map-get($spacing, "xs");
+}
+
+.productType {
+  @include font-size("secondary");
+  opacity: 0.8;
+  margin: 0;
+}
+
+.progressSection {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "sm");
+}
+
+.progressHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.progressLabel {
+  @include font-size("secondary");
+  opacity: 0.9;
+}
+
+.progressValue {
+  @include font-size("secondary");
+  @include font-weight("semibold");
+  color: #4facfe;
+}
+
+.bugsSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include spacing("padding", "md");
+  background: rgba(250, 112, 154, 0.2);
+  @include border-radius("medium");
+}
+
+.bugsLabel {
+  @include font-size("secondary");
+  opacity: 0.9;
+}
+
+.bugsValue {
+  @include font-size("body");
+  @include font-weight("semibold");
+  color: #fa709a;
+}
+
+.miniGame {
+  @include spacing("padding", "xl");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  text-align: center;
+}
+
+.miniGameContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: map-get($spacing, "lg");
+}
+
+.miniGameTitle {
+  @include font-size("body");
+  @include font-weight("semibold");
+  margin: 0;
+}
+
+.miniGameAnimation {
+  height: 150px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.miniGameScore {
+  @include font-size("card-title");
+  @include font-weight("bold");
+  color: #4facfe;
+}
+
+// Coding animation
+.codingAnimation {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.codingLine {
+  height: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(255, 255, 255, 0.1) 100%
+  );
+  border-radius: 6px;
+  width: 0;
+  animation: codingLineGrow 1.5s ease-in-out infinite;
+}
+
+@keyframes codingLineGrow {
+  0% {
+    width: 0;
+  }
+  80% {
+    width: 100%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+// Debug animation
+.debugAnimation {
+  position: relative;
+  width: 300px;
+  height: 100px;
+}
+
+.bugIcon {
+  position: absolute;
+  font-size: 2rem;
+  animation: bugMove 3s ease-in-out infinite;
+}
+
+@keyframes bugMove {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(100px, 30px) rotate(45deg);
+  }
+  50% {
+    transform: translate(200px, -10px) rotate(0deg);
+  }
+  75% {
+    transform: translate(100px, -30px) rotate(-45deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+// Launching stage
+.launchingStage {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "lg");
+}
+
+.launchPreview {
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "md");
+}
+
+.previewItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("padding", "sm");
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.previewLabel {
+  @include font-size("secondary");
+  opacity: 0.9;
+}
+
+.previewValue {
+  @include font-size("secondary");
+  @include font-weight("semibold");
+  color: #4facfe;
+}
+
+.launchDescription {
+  @include font-size("secondary");
+  text-align: center;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: map-get($spacing, "md");
+}
+
+// Complete stage
+.completeStage {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "lg");
+}
+
+.launchResults {
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+}
+
+.resultSection {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "md");
+  text-align: center;
+}
+
+.resultTitle {
+  @include font-size("card-title");
+  @include font-weight("semibold");
+  margin: 0;
+}
+
+.resultType {
+  @include font-size("secondary");
+  opacity: 0.8;
+  margin: 0;
+  margin-bottom: map-get($spacing, "md");
+}
+
+.resultDetails {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: map-get($spacing, "md");
+  @include spacing("margin-top", "md");
+  @include spacing("margin-bottom", "md");
+}
+
+.resultItem {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "xs");
+  @include spacing("padding", "md");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+}
+
+.resultLabel {
+  @include font-size("small");
+  opacity: 0.8;
+}
+
+.resultValue {
+  @include font-size("body");
+  @include font-weight("semibold");
+  color: #4facfe;
+}
+
+.revenueNote {
+  @include font-size("small");
+  opacity: 0.8;
+  @include spacing("padding-top", "md");
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+// Responsive adjustments
+@media (max-width: map-get($breakpoints, "tablet")) {
+  .ideasList {
+    max-height: 300px;
+  }
+
+  .resultDetails {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: map-get($breakpoints, "mobile")) {
+  .stageHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .ideaHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .progressHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: map-get($spacing, "xs");
+  }
+
+  .miniGameAnimation {
+    height: 120px;
+  }
+
+  .codingAnimation {
+    width: 100%;
+  }
+
+  .debugAnimation {
+    width: 100%;
+  }
+}
