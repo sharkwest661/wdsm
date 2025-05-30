@@ -57,10 +57,7 @@
   text-align: center;
   @include spacing("margin-bottom", "xxl");
   animation: bounceIn 0.8s ease-out;
-  @include spacing(
-    "margin-top",
-    "xl"
-  ); // Add top margin to account for language selector
+  @include spacing("margin-top", "xl");
 
   @media (max-width: map-get($breakpoints, "mobile")) {
     @include spacing("margin-top", "md");
@@ -153,6 +150,87 @@
 }
 
 // ==============================================
+// Character Skills Section
+// ==============================================
+
+.character-skills-section {
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(74, 85, 104, 0.1);
+}
+
+.character-skills-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "md");
+  flex-wrap: wrap;
+  gap: map-get($spacing, "sm");
+}
+
+.character-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: map-get($spacing, "sm");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.character-skill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("padding", "sm");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("small");
+
+  .skill-name {
+    @include font-size("secondary");
+    @include font-weight("medium");
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .skill-level {
+    @include font-size("secondary");
+    @include font-weight("bold");
+    color: #4facfe;
+  }
+}
+
+// ==============================================
+// Game Controls Section
+// ==============================================
+
+.game-controls {
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(74, 85, 104, 0.1);
+}
+
+// ==============================================
+// Modal Overlay
+// ==============================================
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: map-get($z-index, "modal");
+  @include spacing("padding", "lg");
+  animation: fadeIn 0.3s ease-out;
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    @include spacing("padding", "md");
+  }
+}
+
+// ==============================================
 // Skills Tab Styles
 // ==============================================
 
@@ -182,16 +260,80 @@
   text-align: center;
   max-width: 600px;
   margin: 0 auto;
+}
 
-  .action-buttons {
-    display: flex;
-    gap: map-get($spacing, "md");
-    justify-content: center;
-    flex-wrap: wrap;
+.current-job-info {
+  @include spacing("padding", "lg");
+  background: rgba(79, 172, 254, 0.1);
+  @include border-radius("medium");
+  border: 2px solid rgba(79, 172, 254, 0.3);
+  @include spacing("margin-bottom", "lg");
+}
 
-    @media (max-width: map-get($breakpoints, "mobile")) {
-      flex-direction: column;
-    }
+.education-section {
+  text-align: center;
+  @include spacing("padding", "lg");
+  background: rgba(132, 250, 176, 0.1);
+  @include border-radius("medium");
+  border: 2px solid rgba(132, 250, 176, 0.3);
+}
+
+.jobs-section {
+  text-align: left;
+}
+
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: map-get($spacing, "md");
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.job-item {
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all map-get($transitions, "normal") ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    @include shadow("card");
+  }
+
+  .job-title {
+    @include font-size("body");
+    @include font-weight("semibold");
+    @include color("primary-text");
+    @include spacing("margin-bottom", "xs");
+    margin: 0 0 map-get($spacing, "xs") 0;
+  }
+
+  .job-company {
+    @include font-size("secondary");
+    @include color("secondary-text");
+    @include spacing("margin-bottom", "sm");
+    margin: 0 0 map-get($spacing, "sm") 0;
+  }
+
+  .job-salary {
+    @include font-size("body");
+    @include font-weight("semibold");
+    color: #4facfe;
+    @include spacing("margin-bottom", "sm");
+    margin: 0 0 map-get($spacing, "sm") 0;
+  }
+
+  .job-level {
+    @include font-size("small");
+    @include font-weight("medium");
+    @include color("secondary-text");
+    @include spacing("margin-bottom", "md");
+    margin: 0 0 map-get($spacing, "md") 0;
   }
 }
 
@@ -247,6 +389,38 @@
   }
 }
 
+.skill-development-actions {
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(74, 85, 104, 0.1);
+  text-align: center;
+
+  .action-buttons {
+    display: flex;
+    gap: map-get($spacing, "md");
+    justify-content: center;
+    flex-wrap: wrap;
+
+    @media (max-width: map-get($breakpoints, "mobile")) {
+      flex-direction: column;
+    }
+  }
+}
+
+// ==============================================
+// Action Buttons Grid
+// ==============================================
+
+.action-buttons {
+  display: flex;
+  gap: map-get($spacing, "md");
+  justify-content: center;
+  flex-wrap: wrap;
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    flex-direction: column;
+  }
+}
+
 // ==============================================
 // Responsive Utilities
 // ==============================================
@@ -272,6 +446,16 @@
 
   .stats-grid {
     gap: map-get($spacing, "sm");
+  }
+
+  .character-skills-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .job-item {
+    @include spacing("padding", "md");
   }
 }
 
@@ -320,13 +504,11 @@
 // Focus and Accessibility Styles
 // ==============================================
 
-// Focus styles for keyboard navigation
 *:focus {
   outline: 2px solid map-get($colors, "accent-blue");
   outline-offset: 2px;
 }
 
-// Skip link for screen readers
 .skip-link {
   position: absolute;
   top: -40px;
@@ -343,7 +525,64 @@
   }
 }
 
-// Reduced motion preferences
+// ==============================================
+// State Indicators
+// ==============================================
+
+.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.highlighted {
+  background: rgba(79, 172, 254, 0.2);
+  border-color: rgba(79, 172, 254, 0.4);
+}
+
+.warning {
+  background: rgba(250, 112, 154, 0.2);
+  border-color: rgba(250, 112, 154, 0.4);
+}
+
+.success {
+  background: rgba(79, 172, 254, 0.2);
+  border-color: rgba(79, 172, 254, 0.4);
+}
+
+// ==============================================
+// Improved Button States
+// ==============================================
+
+.btn {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  &--small {
+    @include spacing("padding", "xs");
+    padding-left: map-get($spacing, "sm");
+    padding-right: map-get($spacing, "sm");
+  }
+
+  &--medium {
+    @include spacing("padding", "sm");
+    padding-left: map-get($spacing, "md");
+    padding-right: map-get($spacing, "md");
+  }
+
+  &--large {
+    @include spacing("padding", "md");
+    padding-left: map-get($spacing, "lg");
+    padding-right: map-get($spacing, "lg");
+  }
+}
+
+// ==============================================
+// Reduced Motion Preferences
+// ==============================================
+
 @media (prefers-reduced-motion: reduce) {
   .avatar-placeholder {
     animation: none;
@@ -360,15 +599,30 @@
   .tab-content {
     animation: none;
   }
+
+  .modal-overlay {
+    animation: none;
+  }
+
+  .job-item {
+    transition: none;
+  }
 }
 
-// High contrast mode
+// ==============================================
+// High Contrast Mode
+// ==============================================
+
 @media (prefers-contrast: high) {
   .card {
     border: 2px solid #000;
   }
 
   .btn {
+    border: 2px solid #000;
+  }
+
+  .job-item {
     border: 2px solid #000;
   }
 }
@@ -384,7 +638,9 @@
 
   .tab-container,
   .notification,
-  .app-language-selector {
+  .app-language-selector,
+  .game-controls,
+  .action-buttons {
     display: none !important;
   }
 
@@ -437,25 +693,26 @@
     @include font-size("body");
     @include spacing("margin-bottom", "lg");
   }
+}
 
-  details {
-    text-align: left;
-    background: rgba(255, 255, 255, 0.1);
-    @include border-radius("medium");
-    @include spacing("padding", "md");
+// ==============================================
+// Animation Helper Classes
+// ==============================================
 
-    summary {
-      cursor: pointer;
-      @include font-weight("semibold");
-      @include spacing("margin-bottom", "sm");
-    }
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
 
-    pre {
-      @include font-size("small");
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-  }
+.slide-up {
+  animation: slideUp 0.4s ease-out;
+}
+
+.bounce-in {
+  animation: bounceIn 0.6s ease-out;
+}
+
+.pulse {
+  animation: pulse 2s infinite;
 }
 
 // ==============================================

@@ -2,7 +2,8 @@
   "game": {
     "title": "💻 Web Dev Life Simulator",
     "subtitle": "Welcome back, {{name}}! Ready to code?",
-    "loading": "Loading your developer journey..."
+    "loading": "Loading your developer journey...",
+    "newDay": "🌅 New Day Started! Energy restored to 100%"
   },
   "characterCreation": {
     "title": "🚀 Welcome to Web Dev Life!",
@@ -20,7 +21,26 @@
     "startingSkills": "Starting Skills",
     "skillsNote": "💡 Learn more skills as you progress through your career!",
     "startJourney": "🚀 Start My Developer Journey",
-    "pleaseEnterName": "Please enter your character name!"
+    "pleaseEnterName": "Please enter your character name!",
+    "distributeSkillPoints": "📊 Distribute Character Skills",
+    "remainingPoints": "Remaining: {{points}} points",
+    "resetDistribution": "🔄 Reset",
+    "skillDistributionNote": "💡 These core skills affect your gameplay bonuses and success rates throughout your career!",
+    "mustUseAllPoints": "❌ You must use all {{points}} remaining skill points",
+    "tooManyPoints": "❌ You have used too many skill points",
+    "pleaseDistributeAllPoints": "Please distribute all skill points before starting!",
+    "skillNames": {
+      "technical": "Technical",
+      "business": "Business",
+      "social": "Social",
+      "creativity": "Creativity"
+    },
+    "skills": {
+      "technical": "Affects coding speed, quality, and skill point gain rate",
+      "business": "Provides bonuses in business ventures and product monetization",
+      "social": "Improves job interview success, salary negotiation, and relationships",
+      "creativity": "Generates better product ideas with higher success probability"
+    }
   },
   "stats": {
     "money": "Money",
@@ -38,7 +58,15 @@
   },
   "character": {
     "age": "Age: {{age}}",
-    "characterStats": "📊 Character Stats"
+    "characterStats": "📊 Character Stats",
+    "skillDevelopment": "Character Skill Development",
+    "availableSkillPoints": "Available Character Skill Points",
+    "noSkillPointsAvailable": "You don't have any character skill points to spend right now.",
+    "earnPointsHint": "Earn points through education, work experience, courses, and achievements!",
+    "improveSkillCost": "Cost: {{cost}} point",
+    "improveSkill": "💪 Improve",
+    "maxLevel": "MAX",
+    "skillImprovementNote": "Character skills permanently affect your gameplay bonuses. Choose wisely!"
   },
   "skills": {
     "title": "🔧 Technical Skills",
@@ -58,12 +86,40 @@
   },
   "career": {
     "title": "🏢 Career Dashboard",
-    "currentStatus": "👨‍🎓 Current Status: <strong>{{status}}</strong>",
+    "currentStatus": "🎓 Current Status: <strong>{{status}}</strong>",
     "statusDescription": "Complete your education and build skills to unlock better job opportunities!",
-    "takeCollegeExam": "📚 Take College Exam",
+    "takeHighSchoolExam": "📚 Take High School Exam (500₼)",
+    "takeCollegeExam": "📚 Take College Exam (1000₼)",
+    "takeUniversityExam": "🎓 Take University Exam (2500₼)",
     "browseJobs": "💼 Browse Jobs",
+    "noJobsAvailable": "❌ No jobs available - Complete high school first!",
+    "examSuccess": "🎉 Congratulations! You passed the {{examType}} exam!",
+    "examFailed": "❌ Not enough money for the {{examType}} exam (Cost: {{cost}}₼)",
+    "currentJob": "Current Job: {{title}} at {{company}}",
+    "noCurrentJob": "Not currently employed",
+    "workDay": "💼 Work Today",
+    "jobPerformance": "Performance: {{rating}}%",
+    "workDaySuccess": "💪 Great work day! Performance: {{performance}}%, Earned: {{pay}}₼, +{{skillPoints}} skill points",
+    "workDayFired": "💥 You were fired! Performance was too low.",
+    "applyForJob": "📝 Apply",
+    "jobLevels": {
+      "junior": "Junior",
+      "middle": "Mid-Level",
+      "senior": "Senior",
+      "team_lead": "Team Lead"
+    },
+    "jobTracks": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "mobile": "Mobile",
+      "fullstack": "Full-Stack"
+    },
     "statuses": {
-      "highSchoolGraduate": "High School Graduate"
+      "none": "No Education",
+      "high_school": "High School Graduate",
+      "college": "College Graduate",
+      "university": "University Graduate",
+      "academy": "Advanced Academy Graduate"
     }
   },
   "business": {
@@ -71,22 +127,34 @@
     "readyToStart": "🚀 Ready to start your entrepreneurial journey?",
     "description": "Build products, start companies, and create your tech empire!",
     "productIdeas": "💡 Product Ideas Generated",
-    "createFirstProduct": "🏗️ Create First Product (University Required)"
+    "createFirstProduct": "🏗️ Create First Product (University Required)",
+    "requiresUniversity": "❌ University degree required to create products"
   },
   "life": {
     "title": "🏠 Life & Lifestyle",
     "housing": "Housing",
     "relationshipStatus": "Relationship Status",
     "restoreEnergy": "⚡ Restore Energy",
-    "eatFood": "🍕 Eat Food",
-    "playGames": "🎮 Play Games",
-    "sleep": "😴 Sleep",
+    "developSkills": "📚 Skill Development",
+    "eatFood": "🍕 Eat Food (25₼)",
+    "playGames": "🎮 Play Games (15₼)",
+    "sleep": "😴 Sleep (Free)",
     "basicApartment": "Basic Apartment",
     "single": "Single",
+    "takeOnlineCourse": "💻 Take Online Course (200₼)",
+    "attendNetworking": "🤝 Attend Networking Event (100₼)",
+    "readBusinessBook": "📖 Read Business Book (Free)",
+    "doCreativeHobby": "🎨 Creative Hobby (50₼)",
     "energyRestored": {
       "food": "🍕 Enjoyed a delicious meal! +20 Energy",
       "games": "🎮 Had fun gaming! +15 Energy",
       "sleep": "😴 Good night sleep! +30 Energy"
+    },
+    "skillActivities": {
+      "onlineCourse": "💻 Completed online course! +1 Character Skill Point",
+      "networking": "🤝 Great networking session! +1 Character Skill Point",
+      "businessBook": "📖 Learned valuable business insights! +1 Character Skill Point",
+      "creativeHobby": "🎨 Enjoyed creative session! +1 Character Skill Point"
     }
   },
   "language": {
@@ -97,6 +165,9 @@
   "buttons": {
     "learn": "Learn",
     "learned": "Learned",
-    "locked": "Locked"
+    "locked": "Locked",
+    "apply": "Apply",
+    "work": "Work",
+    "improve": "Improve"
   }
 }

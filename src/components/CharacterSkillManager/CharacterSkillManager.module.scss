@@ -1,0 +1,300 @@
+// src/components/CharacterSkillManager/CharacterSkillManager.module.scss
+@import "../../styles/variables";
+@import "../../styles/mixins";
+
+.skillManagerCard {
+  @include gradient-bg("character-stats");
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.noPointsCard {
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "lg");
+}
+
+.title {
+  @include font-size("card-title");
+  @include font-weight("bold");
+  margin: 0;
+}
+
+.availablePoints {
+  @include spacing("margin-bottom", "xl");
+  @include spacing("padding", "lg");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  text-align: center;
+}
+
+.skillsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "md");
+}
+
+.skillItem {
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  @include spacing("padding", "lg");
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all map-get($transitions, "normal") ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+
+  &Selected {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+.skillHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: map-get($spacing, "lg");
+}
+
+.skillInfo {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  flex: 1;
+  min-width: 0;
+}
+
+.skillEmoji {
+  @include font-size("card-title");
+  flex-shrink: 0;
+}
+
+.skillDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.skillName {
+  @include font-size("body");
+  @include font-weight("semibold");
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+.skillLevel {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.currentLevel {
+  @include font-size("section-header");
+  @include font-weight("bold");
+  color: #4facfe;
+}
+
+.maxLevel {
+  @include font-size("body");
+  @include font-weight("medium");
+  opacity: 0.7;
+}
+
+.skillProgress {
+  flex: 0 0 120px;
+
+  @media (max-width: map-get($breakpoints, "mobile")) {
+    flex: 0 0 80px;
+  }
+}
+
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  @include border-radius("small");
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4facfe, #00f2fe);
+  @include border-radius("small");
+  transition: width map-get($transitions, "slow") ease;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.4),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+}
+
+.skillExpanded {
+  @include spacing("margin-top", "lg");
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  animation: slideUp 0.3s ease-out;
+}
+
+.skillDescription {
+  @include font-size("secondary");
+  @include font-weight("normal");
+  opacity: 0.9;
+  line-height: 1.4;
+  @include spacing("margin-bottom", "lg");
+  margin: 0 0 map-get($spacing, "lg") 0;
+}
+
+.improvementSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  flex-wrap: wrap;
+}
+
+.improvementInfo {
+  display: flex;
+  flex-direction: column;
+  gap: map-get($spacing, "xs");
+}
+
+.improvementText {
+  @include font-size("small");
+  @include font-weight("medium");
+  opacity: 0.8;
+}
+
+.newLevel {
+  @include font-size("body");
+  @include font-weight("bold");
+  color: #4facfe;
+}
+
+.footer {
+  @include spacing("margin-top", "xl");
+  @include spacing("padding-top", "lg");
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.helpText {
+  text-align: center;
+}
+
+.helpMessage {
+  @include font-size("small");
+  @include font-weight("medium");
+  opacity: 0.8;
+  margin: 0;
+  line-height: 1.4;
+}
+
+// No points available state
+.noPointsContent {
+  @include spacing("padding", "xl");
+}
+
+.noPointsMessage {
+  @include font-size("body");
+  @include font-weight("medium");
+  @include color("primary-text");
+  @include spacing("margin-bottom", "md");
+  margin: 0 0 map-get($spacing, "md") 0;
+}
+
+.earnPointsHint {
+  @include font-size("secondary");
+  @include color("secondary-text");
+  font-style: italic;
+  line-height: 1.4;
+  margin: 0;
+}
+
+// Responsive adjustments
+@media (max-width: map-get($breakpoints, "mobile")) {
+  .skillHeader {
+    flex-direction: column;
+    align-items: stretch;
+    gap: map-get($spacing, "md");
+  }
+
+  .skillInfo {
+    justify-content: center;
+  }
+
+  .skillProgress {
+    flex: 1;
+    max-width: none;
+  }
+
+  .improvementSection {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .improvementInfo {
+    align-items: center;
+  }
+}
+
+// Animation keyframes
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+// Accessibility improvements
+.skillItem {
+  &:focus {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+}
+
+// Dark mode compatibility
+@media (prefers-color-scheme: dark) {
+  .noPointsCard {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+  }
+}

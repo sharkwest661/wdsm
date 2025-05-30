@@ -36,7 +36,7 @@
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1000px;
   width: 100%;
   animation: bounceIn 0.8s ease-out;
 }
@@ -165,9 +165,119 @@
   }
 }
 
-.startingStats {
+// Skill Distribution Styles
+.skillDistribution {
   @include spacing("padding", "lg");
   background: rgba(102, 126, 234, 0.1);
+  @include border-radius("medium");
+  border: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.skillDistributionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  @include spacing("margin-bottom", "lg");
+  flex-wrap: wrap;
+  gap: map-get($spacing, "md");
+}
+
+.skillPointsInfo {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  flex-wrap: wrap;
+}
+
+.remainingPoints {
+  @include font-size("body");
+  @include font-weight("semibold");
+  @include color("accent-blue");
+  @include spacing("padding", "sm");
+  @include spacing("padding-left", "md");
+  @include spacing("padding-right", "md");
+  background: rgba(102, 126, 234, 0.2);
+  @include border-radius("medium");
+  border: 1px solid rgba(102, 126, 234, 0.3);
+}
+
+.skillsGrid {
+  display: grid;
+  gap: map-get($spacing, "md");
+  @include spacing("margin-bottom", "lg");
+}
+
+.skillDistributionItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include spacing("padding", "md");
+  background: rgba(255, 255, 255, 0.1);
+  @include border-radius("medium");
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all map-get($transitions, "normal") ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-1px);
+  }
+}
+
+.skillInfo {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "md");
+  flex: 1;
+  min-width: 0;
+}
+
+.skillEmoji {
+  @include font-size("card-title");
+  flex-shrink: 0;
+}
+
+.skillDetails {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.skillName {
+  @include font-size("body");
+  @include font-weight("semibold");
+  @include color("primary-text");
+}
+
+.skillDescription {
+  @include font-size("small");
+  @include color("secondary-text");
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+.skillControls {
+  display: flex;
+  align-items: center;
+  gap: map-get($spacing, "sm");
+  flex-shrink: 0;
+}
+
+.skillValue {
+  @include font-size("card-title");
+  @include font-weight("bold");
+  @include color("accent-blue");
+  min-width: 30px;
+  text-align: center;
+}
+
+.skillDistributionNote {
+  text-align: center;
+}
+
+.startingStats {
+  @include spacing("padding", "lg");
+  background: rgba(132, 250, 176, 0.1);
   @include border-radius("medium");
 }
 
@@ -245,6 +355,13 @@
   animation: fadeIn 1s ease-out 0.5s both;
 }
 
+.warningText {
+  @include font-size("secondary");
+  color: #fa709a;
+  @include spacing("margin-top", "md");
+  @include font-weight("medium");
+}
+
 .languageSelector {
   position: absolute;
   top: 0;
@@ -276,6 +393,16 @@
     flex-direction: column;
     gap: map-get($spacing, "sm");
   }
+
+  .skillDistributionHeader {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .skillPointsInfo {
+    justify-content: center;
+  }
 }
 
 @media (max-width: map-get($breakpoints, "mobile")) {
@@ -305,6 +432,20 @@
 
   .cardTitle {
     @include font-size("body");
+  }
+
+  .skillDistributionItem {
+    flex-direction: column;
+    gap: map-get($spacing, "md");
+    text-align: center;
+  }
+
+  .skillInfo {
+    justify-content: center;
+  }
+
+  .skillControls {
+    justify-content: center;
   }
 
   // Loading and hover states

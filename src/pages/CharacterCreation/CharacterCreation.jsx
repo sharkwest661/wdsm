@@ -29,6 +29,25 @@ const CharacterCreation = () => {
   const [characterName, setCharacterName] = useState("");
   const [selectedGender, setSelectedGender] = useState(character.gender);
 
+  // Character Skills Distribution State
+  const [characterSkills, setCharacterSkills] = useState({
+    technical: 3,
+    business: 2,
+    social: 2,
+    creativity: 3,
+  });
+
+  const TOTAL_SKILL_POINTS = 10;
+  const MIN_SKILL_VALUE = 1;
+  const MAX_SKILL_VALUE = 7;
+
+  // Calculate remaining points
+  const usedPoints = Object.values(characterSkills).reduce(
+    (sum, value) => sum + value,
+    0
+  );
+  const remainingPoints = TOTAL_SKILL_POINTS - usedPoints;
+
   // Sync language changes with store
   useEffect(() => {
     const handleLanguageChange = (lng) => {
@@ -43,30 +62,83 @@ const CharacterCreation = () => {
 
   const handleGenderChange = (newGender) => {
     setSelectedGender(newGender);
-    // Gender is for gameplay only, doesn't affect avatar
   };
 
   const handleRandomizeAvatar = () => {
     generateRandomAvatar();
   };
 
+  const handleSkillChange = (skillName, change) => {
+    setCharacterSkills((prev) => {
+      const currentValue = prev[skillName];
+      const newValue = currentValue + change;
+
+      // Check constraints
+      if (newValue < MIN_SKILL_VALUE || newValue > MAX_SKILL_VALUE) {
+        return prev;
+      }
+
+      // Check if we have points available (for increasing)
+      if (change > 0 && remainingPoints <= 0) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        [skillName]: newValue,
+      };
+    });
+  };
+
+  const resetSkillDistribution = () => {
+    setCharacterSkills({
+      technical: 3,
+      business: 2,
+      social: 2,
+      creativity: 3,
+    });
+  };
+
+  const canStartGame = characterName.trim() && remainingPoints === 0;
+
   const handleStartGame = () => {
-    if (!characterName.trim()) {
-      alert(t("characterCreation.pleaseEnterName"));
-      return;
+    if (!canStartGame) {
+      if (!characterName.trim()) {
+        alert(t("characterCreation.pleaseEnterName"));
+        return;
+      }
+      if (remainingPoints !== 0) {
+        alert(t("characterCreation.pleaseDistributeAllPoints"));
+        return;
+      }
     }
 
-    // Create character with current avatar state and name
+    // Create character with current avatar state, name, and skill distribution
     createCharacter({
       name: characterName.trim(),
-      gender: selectedGender, // Gender for gameplay
+      gender: selectedGender,
       avatar: {
-        ...character.avatar, // Use current avatar state
+        ...character.avatar,
       },
+      characterSkills: characterSkills,
     });
 
     // Set character as created in app store
     setCharacterCreated(true);
+  };
+
+  const skillDescriptions = {
+    technical: t("characterCreation.skills.technical"),
+    business: t("characterCreation.skills.business"),
+    social: t("characterCreation.skills.social"),
+    creativity: t("characterCreation.skills.creativity"),
+  };
+
+  const skillEmojis = {
+    technical: "🔧",
+    business: "💼",
+    social: "🤝",
+    creativity: "💡",
   };
 
   return (
@@ -162,43 +234,74 @@ const CharacterCreation = () => {
               />
             </div>
 
-            <div className={styles.startingStats}>
-              <h3 className={styles.controlTitle}>
-                {t("characterCreation.startingStats")}
-              </h3>
-              <div className={styles.statsGrid}>
-                <div className={styles.statItem}>
-                  <span className={styles.statEmoji}>💰</span>
-                  <span className={styles.statLabel}>{t("stats.money")}</span>
-                  <span className={styles.statValue}>
-                    {character.money.toLocaleString()} ₼
+            {/* Character Skills Distribution */}
+            <div className={styles.skillDistribution}>
+              <div className={styles.skillDistributionHeader}>
+                <h3 className={styles.controlTitle}>
+                  {t("characterCreation.distributeSkillPoints")}
+                </h3>
+                <div className={styles.skillPointsInfo}>
+                  <span className={styles.remainingPoints}>
+                    {t("characterCreation.remainingPoints", {
+                      points: remainingPoints,
+                    })}
                   </span>
+                  <Button
+                    variant="secondary"
+                    size="small"
+                    onClick={resetSkillDistribution}
+                  >
+                    {t("characterCreation.resetDistribution")}
+                  </Button>
                 </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statEmoji}>⭐</span>
-                  <span className={styles.statLabel}>
-                    {t("stats.reputation")}
-                  </span>
-                  <span className={styles.statValue}>
-                    {character.reputation}
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statEmoji}>🔧</span>
-                  <span className={styles.statLabel}>
-                    {t("stats.skillPoints")}
-                  </span>
-                  <span className={styles.statValue}>
-                    {character.skillPoints}
-                  </span>
-                </div>
-                <div className={styles.statItem}>
-                  <span className={styles.statEmoji}>⚡</span>
-                  <span className={styles.statLabel}>{t("stats.energy")}</span>
-                  <span className={styles.statValue}>
-                    {character.energy}/100
-                  </span>
-                </div>
+              </div>
+
+              <div className={styles.skillsGrid}>
+                {Object.entries(characterSkills).map(([skillName, value]) => (
+                  <div key={skillName} className={styles.skillDistributionItem}>
+                    <div className={styles.skillInfo}>
+                      <span className={styles.skillEmoji}>
+                        {skillEmojis[skillName]}
+                      </span>
+                      <div className={styles.skillDetails}>
+                        <span className={styles.skillName}>
+                          {t(`characterCreation.skillNames.${skillName}`)}
+                        </span>
+                        <span className={styles.skillDescription}>
+                          {skillDescriptions[skillName]}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={styles.skillControls}>
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        onClick={() => handleSkillChange(skillName, -1)}
+                        disabled={value <= MIN_SKILL_VALUE}
+                      >
+                        −
+                      </Button>
+                      <span className={styles.skillValue}>{value}</span>
+                      <Button
+                        variant="secondary"
+                        size="small"
+                        onClick={() => handleSkillChange(skillName, 1)}
+                        disabled={
+                          value >= MAX_SKILL_VALUE || remainingPoints <= 0
+                        }
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className={styles.skillDistributionNote}>
+                <p className={styles.skillsNote}>
+                  {t("characterCreation.skillDistributionNote")}
+                </p>
               </div>
             </div>
 
@@ -223,10 +326,20 @@ const CharacterCreation = () => {
             size="large"
             onClick={handleStartGame}
             fullWidth
-            disabled={!characterName.trim()}
+            disabled={!canStartGame}
           >
             {t("characterCreation.startJourney")}
           </Button>
+
+          {remainingPoints !== 0 && (
+            <p className={styles.warningText}>
+              {remainingPoints > 0
+                ? t("characterCreation.mustUseAllPoints", {
+                    points: remainingPoints,
+                  })
+                : t("characterCreation.tooManyPoints")}
+            </p>
+          )}
         </div>
       </div>
     </div>

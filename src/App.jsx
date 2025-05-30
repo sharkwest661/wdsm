@@ -15,6 +15,7 @@ import {
 import LanguageSelector from "./ui/LanguageSelector/LanguageSelector";
 
 import { SkillItem } from "./components";
+import CharacterSkillManager from "./components/CharacterSkillManager/CharacterSkillManager";
 import { CharacterCreation } from "./pages";
 
 // Import modular stores
@@ -42,10 +43,29 @@ const WebDevLifeSimulator = () => {
   const skillTree = useSkillsStore((state) => state.skills.skillTree);
   const learnSkill = useSkillsStore((state) => state.learnSkill);
 
+  // Career store
+  const getAvailableJobs = useCareerStore((state) => state.getAvailableJobs);
+  const getCurrentJob = useCareerStore((state) => state.getCurrentJob);
+  const applyForJob = useCareerStore((state) => state.applyForJob);
+  const completeWorkDay = useCareerStore((state) => state.completeWorkDay);
+
   // Life store actions
   const eatFood = useLifeStore((state) => state.eatFood);
   const playGames = useLifeStore((state) => state.playGames);
   const sleep = useLifeStore((state) => state.sleep);
+
+  // Character store actions
+  const takeExam = useCharacterStore((state) => state.takeExam);
+  const improveCharacterSkill = useCharacterStore(
+    (state) => state.improveCharacterSkill
+  );
+  const takeOnlineCourse = useCharacterStore((state) => state.takeOnlineCourse);
+  const attendNetworkingEvent = useCharacterStore(
+    (state) => state.attendNetworkingEvent
+  );
+  const readBusinessBook = useCharacterStore((state) => state.readBusinessBook);
+  const doCreativeHobby = useCharacterStore((state) => state.doCreativeHobby);
+  const startNewDay = useCharacterStore((state) => state.startNewDay);
 
   // Notification store
   const addNotification = useNotificationStore(
@@ -59,6 +79,11 @@ const WebDevLifeSimulator = () => {
   );
 
   const [activeTab, setActiveTab] = useState("character");
+  const [showSkillManager, setShowSkillManager] = useState(false);
+
+  // Get current job
+  const currentJob = getCurrentJob();
+  const availableJobs = getAvailableJobs(useCharacterStore, useSkillsStore);
 
   // Initialize language from store
   useEffect(() => {
@@ -101,7 +126,6 @@ const WebDevLifeSimulator = () => {
   };
 
   const handleLearnSkill = (skillName, cost) => {
-    // Pass the character store to the skills store learn function
     const success = learnSkill(skillName, useCharacterStore);
     if (success) {
       showNotification(
@@ -113,6 +137,27 @@ const WebDevLifeSimulator = () => {
         "warning",
         t("skills.learnFailed", { skill: skillName })
       );
+    }
+  };
+
+  // Handle new day
+  const handleNewDay = () => {
+    startNewDay();
+    showNotification("info", t("game.newDay"));
+  };
+
+  // Handle character skill improvement
+  const handleImproveCharacterSkill = (skillName, pointsToSpend) => {
+    const success = improveCharacterSkill(skillName, pointsToSpend);
+    if (success) {
+      showNotification(
+        "success",
+        `🎉 Improved ${t(`characterCreation.skillNames.${skillName}`)}!`
+      );
+      return true;
+    } else {
+      showNotification("warning", "❌ Cannot improve this skill right now");
+      return false;
     }
   };
 
@@ -140,7 +185,95 @@ const WebDevLifeSimulator = () => {
     showNotification("success", t("life.energyRestored.sleep"));
   };
 
-  // Mock skills data - TODO: Move to skills store or fetch from store
+  // Handle skill development activities
+  const handleTakeOnlineCourse = () => {
+    const result = takeOnlineCourse("Web Development");
+    if (result.success) {
+      showNotification("success", t("life.skillActivities.onlineCourse"));
+    } else {
+      showNotification("warning", result.message);
+    }
+  };
+
+  const handleAttendNetworking = () => {
+    const result = attendNetworkingEvent();
+    if (result.success) {
+      showNotification("success", t("life.skillActivities.networking"));
+    } else {
+      showNotification("warning", result.message);
+    }
+  };
+
+  const handleReadBusinessBook = () => {
+    const result = readBusinessBook();
+    if (result.success) {
+      showNotification("success", t("life.skillActivities.businessBook"));
+    } else {
+      showNotification("warning", result.message);
+    }
+  };
+
+  const handleCreativeHobby = () => {
+    const result = doCreativeHobby("Drawing");
+    if (result.success) {
+      showNotification("success", t("life.skillActivities.creativeHobby"));
+    } else {
+      showNotification("warning", result.message);
+    }
+  };
+
+  // Handle career actions
+  const handleTakeExam = (examType, cost) => {
+    const success = takeExam(examType, cost);
+    if (success) {
+      showNotification(
+        "success",
+        t("career.examSuccess", { examType: t(`career.statuses.${examType}`) })
+      );
+    } else {
+      showNotification(
+        "warning",
+        t("career.examFailed", {
+          examType: t(`career.statuses.${examType}`),
+          cost,
+        })
+      );
+    }
+  };
+
+  const handleApplyForJob = (jobId) => {
+    const result = applyForJob(jobId, useCharacterStore, useSkillsStore);
+    if (result.success) {
+      showNotification("success", result.message);
+    } else {
+      showNotification("warning", result.message);
+    }
+  };
+
+  const handleWorkDay = () => {
+    const result = completeWorkDay(useCharacterStore);
+    if (result) {
+      if (result.fired) {
+        showNotification("warning", t("career.workDayFired"));
+      } else {
+        showNotification(
+          "success",
+          t("career.workDaySuccess", {
+            performance: result.performanceScore,
+            pay: result.dailyPay,
+            skillPoints: result.skillPointsEarned,
+          })
+        );
+      }
+    } else {
+      showNotification(
+        "warning",
+        "Cannot work today - need more energy or no job!"
+      );
+    }
+  };
+
+  // Mock skills data
   const mockSkills = [
     {
       name: "JavaScript",
@@ -234,8 +367,63 @@ const WebDevLifeSimulator = () => {
                     animated={true}
                   />
                 </div>
+
+                {/* Character Skills Section */}
+                <div className="character-skills-section mt-lg">
+                  <div className="character-skills-header">
+                    <h4 className="text-subsection-title">
+                      📊 Character Skills
+                    </h4>
+                    {character.availableCharacterSkillPoints > 0 && (
+                      <Button
+                        variant="warning"
+                        size="small"
+                        onClick={() => setShowSkillManager(true)}
+                      >
+                        💪 Improve Skills (
+                        {character.availableCharacterSkillPoints})
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="character-skills-grid">
+                    {Object.entries(character.characterSkills).map(
+                      ([skillName, level]) => (
+                        <div key={skillName} className="character-skill-item">
+                          <span className="skill-name">
+                            {t(`characterCreation.skillNames.${skillName}`)}
+                          </span>
+                          <span className="skill-level">{level}/10</span>
+                        </div>
+                      )
+                    )}
+                  </div>
+                </div>
+
+                {/* Game Controls */}
+                <div className="game-controls mt-lg">
+                  <Button
+                    variant="info"
+                    size="large"
+                    fullWidth
+                    onClick={handleNewDay}
+                  >
+                    🌅 Start New Day
+                  </Button>
+                </div>
               </Card>
             </div>
+
+            {/* Character Skill Manager Modal */}
+            {showSkillManager && (
+              <div className="modal-overlay">
+                <CharacterSkillManager
+                  character={character}
+                  onImproveSkill={handleImproveCharacterSkill}
+                  onClose={() => setShowSkillManager(false)}
+                />
+              </div>
+            )}
           </div>
         );
 
@@ -282,37 +470,140 @@ const WebDevLifeSimulator = () => {
         );
 
       case "career":
+        const currentEducation = character.education;
+        const educationStatusKey = `career.statuses.${currentEducation}`;
+
+        const examOptions = {
+          none: {
+            next: "high_school",
+            cost: 500,
+            examKey: "takeHighSchoolExam",
+          },
+          high_school: {
+            next: "college",
+            cost: 1000,
+            examKey: "takeCollegeExam",
+          },
+          college: {
+            next: "university",
+            cost: 2500,
+            examKey: "takeUniversityExam",
+          },
+        };
+
+        const currentExamOption = examOptions[currentEducation];
+        const canBrowseJobs = currentEducation !== "none";
+
         return (
           <div className="tab-content">
             <Card>
               <h3 className="text-card-title mb-lg">{t("career.title")}</h3>
-              <div className="career-info">
+
+              {/* Current Status */}
+              <div className="career-info mb-lg">
                 <p
                   className="text-body mb-md"
                   dangerouslySetInnerHTML={{
                     __html: t("career.currentStatus", {
-                      status: t("career.statuses.highSchoolGraduate"),
+                      status: t(educationStatusKey),
                     }),
                   }}
                 />
-                <p className="text-secondary mb-lg">
-                  {t("career.statusDescription")}
-                </p>
 
-                <div className="action-buttons">
-                  <Button variant="primary" size="large">
-                    {t("career.takeCollegeExam")}
-                  </Button>
-                  <Button variant="secondary" size="large">
-                    {t("career.browseJobs")}
-                  </Button>
-                </div>
+                {currentJob ? (
+                  <div className="current-job-info">
+                    <p className="text-body mb-md">
+                      {t("career.currentJob", {
+                        title: currentJob.title,
+                        company: currentJob.company,
+                      })}
+                    </p>
+                    <Button
+                      variant="primary"
+                      size="large"
+                      onClick={handleWorkDay}
+                      disabled={character.energy < 30}
+                    >
+                      {t("career.workDay")}
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="text-secondary mb-md">
+                    {t("career.noCurrentJob")}
+                  </p>
+                )}
               </div>
+
+              {/* Education */}
+              {currentExamOption && (
+                <div className="education-section mb-lg">
+                  <Button
+                    variant="primary"
+                    size="large"
+                    onClick={() =>
+                      handleTakeExam(
+                        currentExamOption.next,
+                        currentExamOption.cost
+                      )
+                    }
+                    disabled={character.money < currentExamOption.cost}
+                  >
+                    {t(`career.${currentExamOption.examKey}`)}
+                  </Button>
+
+                  {character.money < currentExamOption.cost && (
+                    <p
+                      className="text-secondary mt-md"
+                      style={{ color: "#fa709a" }}
+                    >
+                      💰 Need {currentExamOption.cost}₼ for exam (You have{" "}
+                      {character.money}₼)
+                    </p>
+                  )}
+                </div>
+              )}
+
+              {/* Jobs */}
+              {canBrowseJobs && (
+                <div className="jobs-section">
+                  <h4 className="text-subsection-title mb-md">
+                    💼 Available Jobs
+                  </h4>
+                  <div className="jobs-grid">
+                    {availableJobs.slice(0, 6).map((job) => (
+                      <div key={job.id} className="job-item">
+                        <h5 className="job-title">{job.title}</h5>
+                        <p className="job-company">{job.company}</p>
+                        <p className="job-salary">{job.salary}₼/day</p>
+                        <p className="job-level">
+                          {t(`career.jobLevels.${job.level}`)}{" "}
+                          {t(`career.jobTracks.${job.track}`)}
+                        </p>
+                        <Button
+                          variant="secondary"
+                          size="small"
+                          onClick={() => handleApplyForJob(job.id)}
+                        >
+                          {t("career.applyForJob")}
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {!canBrowseJobs && (
+                <p className="text-secondary">{t("career.noJobsAvailable")}</p>
+              )}
             </Card>
           </div>
         );
 
       case "business":
+        const canCreateProducts =
+          character.education === "university" ||
+          character.education === "academy";
+
         return (
           <div className="tab-content">
             <Card variant="business">
@@ -333,9 +624,23 @@ const WebDevLifeSimulator = () => {
                   />
                 </div>
 
-                <Button variant="warning" size="large" disabled>
-                  {t("business.createFirstProduct")}
-                </Button>
+                {canCreateProducts ? (
+                  <Button variant="warning" size="large">
+                    {t("business.createFirstProduct")}
+                  </Button>
+                ) : (
+                  <div>
+                    <Button variant="warning" size="large" disabled>
+                      {t("business.createFirstProduct")}
+                    </Button>
+                    <p
+                      className="text-secondary mt-md"
+                      style={{ color: "#fa709a" }}
+                    >
+                      {t("business.requiresUniversity")}
+                    </p>
+                  </div>
+                )}
               </div>
             </Card>
           </div>
@@ -366,7 +671,8 @@ const WebDevLifeSimulator = () => {
                   </div>
                 </div>
 
-                <div className="energy-actions">
+                {/* Energy Activities */}
+                <div className="energy-actions mb-lg">
                   <h4 className="text-subsection-title mb-md">
                     {t("life.restoreEnergy")}
                   </h4>
@@ -375,6 +681,7 @@ const WebDevLifeSimulator = () => {
                       variant="info"
                       size="medium"
                       onClick={handleEatFood}
+                      disabled={character.money < 25}
                     >
                       {t("life.eatFood")}
                     </Button>
@@ -382,11 +689,53 @@ const WebDevLifeSimulator = () => {
                       variant="info"
                       size="medium"
                       onClick={handlePlayGames}
+                      disabled={character.money < 15}
                     >
                       {t("life.playGames")}
                     </Button>
                     <Button variant="info" size="medium" onClick={handleSleep}>
                       {t("life.sleep")}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Skill Development Activities */}
+                <div className="skill-development-actions">
+                  <h4 className="text-subsection-title mb-md">
+                    {t("life.developSkills")}
+                  </h4>
+                  <div className="action-buttons">
+                    <Button
+                      variant="success"
+                      size="medium"
+                      onClick={handleTakeOnlineCourse}
+                      disabled={character.money < 200 || character.energy < 30}
+                    >
+                      {t("life.takeOnlineCourse")}
+                    </Button>
+                    <Button
+                      variant="success"
+                      size="medium"
+                      onClick={handleAttendNetworking}
+                      disabled={character.money < 100 || character.energy < 25}
+                    >
+                      {t("life.attendNetworking")}
+                    </Button>
+                    <Button
+                      variant="success"
+                      size="medium"
+                      onClick={handleReadBusinessBook}
+                      disabled={character.energy < 20}
+                    >
+                      {t("life.readBusinessBook")}
+                    </Button>
+                    <Button
+                      variant="success"
+                      size="medium"
+                      onClick={handleCreativeHobby}
+                      disabled={character.money < 50 || character.energy < 15}
+                    >
+                      {t("life.doCreativeHobby")}
                     </Button>
                   </div>
                 </div>
@@ -424,7 +773,6 @@ const WebDevLifeSimulator = () => {
         <main className="app-main">{renderTabContent()}</main>
 
         {/* Render notifications from notification store */}
-        {console.log("Notifications:", notifications)}
         {notifications?.map((notification) => (
           <Notification
             key={notification.id}

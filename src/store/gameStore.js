@@ -33,7 +33,7 @@ const useGameStore = create(
         characterSkills: {
           technical: 3, // Affects coding speed, quality, and skill point gain
           business: 2, // Bonuses in business ventures and monetization
-          social: 2, // Job interviews, salary negotiation, dating
+          social: 2, // Job interviews, salary negotiation
           creativity: 3, // Better product ideas and success probability
         },
       },

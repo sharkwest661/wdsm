@@ -2,7 +2,8 @@
   "game": {
     "title": "💻 Veb Developer Yaşam Simulyatoru",
     "subtitle": "Yenidən xoş gəldin, {{name}}! Kodlaşmağa hazırsan?",
-    "loading": "Developer səyahətin yüklənir..."
+    "loading": "Developer səyahətin yüklənir...",
+    "newDay": "🌅 Yeni Gün Başladı! Enerji 100%-ə bərpa olundu"
   },
   "characterCreation": {
     "title": "🚀 Veb Developer Həyatına Xoş Gəldin!",
@@ -20,7 +21,26 @@
     "startingSkills": "Başlanğıc Bacarıqlar",
     "skillsNote": "💡 Karyeran boyunca daha çox bacarıq öyrən!",
     "startJourney": "🚀 Developer Səyahətimi Başlat",
-    "pleaseEnterName": "Xahiş edirik xarakter adını daxil edin!"
+    "pleaseEnterName": "Xahiş edirik xarakter adını daxil edin!",
+    "distributeSkillPoints": "📊 Xarakter Bacarıqlarını Böldür",
+    "remainingPoints": "Qalan: {{points}} xal",
+    "resetDistribution": "🔄 Sıfırla",
+    "skillDistributionNote": "💡 Bu əsas bacarıqlar karyerin boyunca oyun bonuslarına və müvəffəqiyyət dərəcələrinə təsir edir!",
+    "mustUseAllPoints": "❌ Qalan {{points}} bacarıq xalını istifadə etməlisiniz",
+    "tooManyPoints": "❌ Həddindən artıq bacarıq xalı istifadə etmisiniz",
+    "pleaseDistributeAllPoints": "Başlamazdan əvvəl bütün bacarıq xallarını bölüşdürün!",
+    "skillNames": {
+      "technical": "Texniki",
+      "business": "Biznes",
+      "social": "Sosial",
+      "creativity": "Yaradıcılıq"
+    },
+    "skills": {
+      "technical": "Kodlaşma sürətinə, keyfiyyətinə və bacarıq xalı qazanma dərəcəsinə təsir edir",
+      "business": "Biznes təşəbbüslərində və məhsul pul qazanmasında bonus verir",
+      "social": "İş müsahibəsi müvəffəqiyyətini, maaş danışıqlarını və münasibətləri yaxşılaşdırır",
+      "creativity": "Yüksək müvəffəqiyyət ehtimalı ilə daha yaxşı məhsul ideyaları yaradır"
+    }
   },
   "stats": {
     "money": "Pul",
@@ -38,7 +58,15 @@
   },
   "character": {
     "age": "Yaş: {{age}}",
-    "characterStats": "📊 Xarakter Statistikaları"
+    "characterStats": "📊 Xarakter Statistikaları",
+    "skillDevelopment": "Xarakter Bacarıq İnkişafı",
+    "availableSkillPoints": "Mövcud Xarakter Bacarıq Xalları",
+    "noSkillPointsAvailable": "Hazırda xərcləyəcək xarakter bacarıq xalınız yoxdur.",
+    "earnPointsHint": "Təhsil, iş təcrübəsi, kurslar və nailiyyətlər vasitəsilə xal qazanın!",
+    "improveSkillCost": "Qiymət: {{cost}} xal",
+    "improveSkill": "💪 Yaxşılaşdır",
+    "maxLevel": "MAX",
+    "skillImprovementNote": "Xarakter bacarıqları oyun bonuslarınıza daimi təsir edir. Düşünərək seçin!"
   },
   "skills": {
     "title": "🔧 Texniki Bacarıqlar",
@@ -58,12 +86,40 @@
   },
   "career": {
     "title": "🏢 Karyera Paneli",
-    "currentStatus": "👨‍🎓 Hazırkı Status: <strong>{{status}}</strong>",
+    "currentStatus": "🎓 Hazırkı Status: <strong>{{status}}</strong>",
     "statusDescription": "Təhsilini tamamla və bacarıqlar öyrən ki, daha yaxşı iş imkanları açılsın!",
-    "takeCollegeExam": "📚 Kollec İmtahanı Ver",
+    "takeHighSchoolExam": "📚 Orta Məktəb İmtahanı Ver (500₼)",
+    "takeCollegeExam": "📚 Kollec İmtahanı Ver (1000₼)",
+    "takeUniversityExam": "🎓 Universitet İmtahanı Ver (2500₼)",
     "browseJobs": "💼 İşlərə Bax",
+    "noJobsAvailable": "❌ Heç bir iş mövcud deyil - Əvvəlcə orta məktəbi bitir!",
+    "examSuccess": "🎉 Təbrikler! {{examType}} imtahanını keçdin!",
+    "examFailed": "❌ {{examType}} imtahanı üçün kifayət qədər pul yoxdur (Qiymət: {{cost}}₼)",
+    "currentJob": "Hazırkı İş: {{company}}-də {{title}}",
+    "noCurrentJob": "Hazırda işsizsiniz",
+    "workDay": "💼 Bu Gün İşə Get",
+    "jobPerformance": "Performans: {{rating}}%",
+    "workDaySuccess": "💪 Əla iş günü! Performans: {{performance}}%, Qazanc: {{pay}}₼, +{{skillPoints}} bacarıq xalı",
+    "workDayFired": "💥 İşdən çıxarıldınız! Performans çox aşağı idi.",
+    "applyForJob": "📝 Müraciət Et",
+    "jobLevels": {
+      "junior": "Junior",
+      "middle": "Orta Səviyyə",
+      "senior": "Senior",
+      "team_lead": "Komanda Lideri"
+    },
+    "jobTracks": {
+      "frontend": "Frontend",
+      "backend": "Backend",
+      "mobile": "Mobil",
+      "fullstack": "Full-Stack"
+    },
     "statuses": {
-      "highSchoolGraduate": "Orta Məktəb Məzunu"
+      "none": "Təhsil Yoxdur",
+      "high_school": "Orta Məktəb Məzunu",
+      "college": "Kollec Məzunu",
+      "university": "Universitet Məzunu",
+      "academy": "Qabaqcıl Akademiya Məzunu"
     }
   },
   "business": {
@@ -71,22 +127,34 @@
     "readyToStart": "🚀 Sahibkarlıq səyahətinə başlamağa hazırsan?",
     "description": "Məhsullar yarat, şirkətlər qur və texnologiya imperiyasını qur!",
     "productIdeas": "💡 Yaradılan Məhsul İdeyaları",
-    "createFirstProduct": "🏗️ İlk Məhsulu Yarat (Universitet Tələb Olunur)"
+    "createFirstProduct": "🏗️ İlk Məhsulu Yarat (Universitet Tələb Olunur)",
+    "requiresUniversity": "❌ Məhsul yaratmaq üçün universitet dərəcəsi tələb olunur"
   },
   "life": {
     "title": "🏠 Həyat və Yaşayış Tərzi",
     "housing": "Yaşayış",
     "relationshipStatus": "Münasibət Statusu",
     "restoreEnergy": "⚡ Enerji Bərpa Et",
-    "eatFood": "🍕 Yemək Ye",
-    "playGames": "🎮 Oyun Oyna",
-    "sleep": "😴 Yat",
+    "developSkills": "📚 Bacarıq İnkişafı",
+    "eatFood": "🍕 Yemək Ye (25₼)",
+    "playGames": "🎮 Oyun Oyna (15₼)",
+    "sleep": "😴 Yat (Pulsuz)",
     "basicApartment": "Sadə Mənzil",
     "single": "Subay",
+    "takeOnlineCourse": "💻 Online Kurs Al (200₼)",
+    "attendNetworking": "🤝 Şəbəkə Tədbirinə Qatıl (100₼)",
+    "readBusinessBook": "📖 Biznes Kitabı Oxu (Pulsuz)",
+    "doCreativeHobby": "🎨 Yaradıcı Hobbi (50₼)",
     "energyRestored": {
       "food": "🍕 Dadlı yeməkdən həzz aldın! +20 Enerji",
       "games": "🎮 Oyundan əyləndin! +15 Enerji",
       "sleep": "😴 Yaxşı gecə yuxusu! +30 Enerji"
+    },
+    "skillActivities": {
+      "onlineCourse": "💻 Online kurs tamamlandı! +1 Xarakter Bacarıq Xalı",
+      "networking": "🤝 Əla şəbəkə sessiyası! +1 Xarakter Bacarıq Xalı",
+      "businessBook": "📖 Dəyərli biznes məlumatları öyrəndiniz! +1 Xarakter Bacarıq Xalı",
+      "creativeHobby": "🎨 Yaradıcı sessiyadan həzz aldınız! +1 Xarakter Bacarıq Xalı"
     }
   },
   "language": {
@@ -97,6 +165,9 @@
   "buttons": {
     "learn": "Öyrən",
     "learned": "Öyrənildi",
-    "locked": "Bağlı"
+    "locked": "Bağlı",
+    "apply": "Müraciət Et",
+    "work": "İşə Get",
+    "improve": "Yaxşılaşdır"
   }
 }
