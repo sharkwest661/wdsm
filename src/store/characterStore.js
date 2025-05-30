@@ -9,10 +9,10 @@ const useCharacterStore = create(
       // CHARACTER STATE
       // ==========================================
       character: {
-        name: "Alex Developer",
+        name: "Developer X",
         age: 21,
-        money: 1500,
-        reputation: 45,
+        money: 100,
+        reputation: 10,
         energy: 75,
         skillPoints: 12,
         education: "high_school", // high_school, college, university, academy
